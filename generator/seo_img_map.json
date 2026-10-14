@@ -1,0 +1,125 @@
+{
+ "map": {
+  "loop/before-island.jpg": "loop/lexonia-pro-clean-break-room-island-before-cleaning.jpg",
+  "loop/after-island.jpg": "loop/lexonia-pro-clean-break-room-island-after-cleaning.jpg",
+  "loop/before-countertop.jpg": "loop/lexonia-pro-clean-break-room-counter-before-cleaning.jpg",
+  "loop/after-countertop.jpg": "loop/lexonia-pro-clean-break-room-counter-after-cleaning.jpg",
+  "loop/before-sink.jpg": "loop/lexonia-pro-clean-sink-area-before-cleaning.jpg",
+  "loop/after-sink.jpg": "loop/lexonia-pro-clean-sink-area-after-cleaning.jpg",
+  "loop/before-sink-detail.jpg": "loop/lexonia-pro-clean-sink-detail-before-cleaning.jpg",
+  "loop/after-sink-detail.jpg": "loop/lexonia-pro-clean-sink-detail-after-cleaning.jpg",
+  "loop/supplies-shelf.jpg": "loop/lexonia-pro-clean-cleaning-supplies-shelf.jpg",
+  "loop/supply-caddy.jpg": "loop/lexonia-pro-clean-janitorial-supply-caddy.jpg",
+  "loop/cleaning-cart.jpg": "loop/lexonia-pro-clean-cleaning-cart-mop-bucket-vacuum.jpg",
+  "loop/hallway-cart.jpg": "loop/lexonia-pro-clean-cleaning-cart-office-hallway.jpg",
+  "loop/trash-station.jpg": "loop/lexonia-pro-clean-trash-station-fresh-liners.jpg",
+  "island-before-after.jpg": "lexonia-pro-clean-break-room-island-before-and-after.jpg",
+  "countertop-before-after.jpg": "lexonia-pro-clean-break-room-counter-before-and-after.jpg",
+  "sink-before-after.jpg": "lexonia-pro-clean-sink-area-before-and-after.jpg",
+  "sink-detail-before-after.jpg": "lexonia-pro-clean-sink-detail-before-and-after.jpg",
+  "restroom-vanity.jpg": "lexonia-pro-clean-restroom-vanity-cleaning.jpg",
+  "kitchenette-sink.jpg": "lexonia-pro-clean-kitchenette-sink-cleaning.jpg",
+  "trash-station.jpg": "lexonia-pro-clean-trash-station-cleaning.jpg",
+  "equipment-caddy.jpg": "lexonia-pro-clean-janitorial-caddy-supplies.jpg",
+  "equipment-cart.jpg": "lexonia-pro-clean-cleaning-cart-and-vacuum.jpg",
+  "equipment-vacuum.jpg": "lexonia-pro-clean-upright-vacuum.jpg"
+ },
+ "sizes": {
+  "loop/lexonia-pro-clean-break-room-island-before-cleaning.jpg": [
+   800,
+   1000
+  ],
+  "loop/lexonia-pro-clean-break-room-island-after-cleaning.jpg": [
+   800,
+   1000
+  ],
+  "loop/lexonia-pro-clean-break-room-counter-before-cleaning.jpg": [
+   800,
+   1000
+  ],
+  "loop/lexonia-pro-clean-break-room-counter-after-cleaning.jpg": [
+   800,
+   1000
+  ],
+  "loop/lexonia-pro-clean-sink-area-before-cleaning.jpg": [
+   800,
+   1000
+  ],
+  "loop/lexonia-pro-clean-sink-area-after-cleaning.jpg": [
+   800,
+   1000
+  ],
+  "loop/lexonia-pro-clean-sink-detail-before-cleaning.jpg": [
+   800,
+   1000
+  ],
+  "loop/lexonia-pro-clean-sink-detail-after-cleaning.jpg": [
+   800,
+   1000
+  ],
+  "loop/lexonia-pro-clean-cleaning-supplies-shelf.jpg": [
+   800,
+   1000
+  ],
+  "loop/lexonia-pro-clean-janitorial-supply-caddy.jpg": [
+   800,
+   1000
+  ],
+  "loop/lexonia-pro-clean-cleaning-cart-mop-bucket-vacuum.jpg": [
+   800,
+   1000
+  ],
+  "loop/lexonia-pro-clean-cleaning-cart-office-hallway.jpg": [
+   800,
+   1000
+  ],
+  "loop/lexonia-pro-clean-trash-station-fresh-liners.jpg": [
+   800,
+   1000
+  ],
+  "lexonia-pro-clean-break-room-island-before-and-after.jpg": [
+   1400,
+   871
+  ],
+  "lexonia-pro-clean-break-room-counter-before-and-after.jpg": [
+   1400,
+   871
+  ],
+  "lexonia-pro-clean-sink-area-before-and-after.jpg": [
+   1400,
+   871
+  ],
+  "lexonia-pro-clean-sink-detail-before-and-after.jpg": [
+   1400,
+   871
+  ],
+  "lexonia-pro-clean-restroom-vanity-cleaning.jpg": [
+   800,
+   1067
+  ],
+  "lexonia-pro-clean-kitchenette-sink-cleaning.jpg": [
+   800,
+   1067
+  ],
+  "lexonia-pro-clean-trash-station-cleaning.jpg": [
+   800,
+   1067
+  ],
+  "lexonia-pro-clean-janitorial-caddy-supplies.jpg": [
+   640,
+   1138
+  ],
+  "lexonia-pro-clean-cleaning-cart-and-vacuum.jpg": [
+   640,
+   1138
+  ],
+  "lexonia-pro-clean-upright-vacuum.jpg": [
+   640,
+   1138
+  ],
+  "lexonia-pro-clean-commercial-cleaning-og.jpg": [
+   1200,
+   630
+  ]
+ }
+}
