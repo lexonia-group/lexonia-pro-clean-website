@@ -19,6 +19,7 @@ _sh.copytree(os.path.join(here, 'assets_src'), out, dirs_exist_ok=True)   # phot
 import json as _json
 SITE = 'https://lexoniaproclean.com/'
 BUILD_DATE = '2026-10-14'   # update when the content changes: used for sitemap lastmod and dateModified
+CLARITY_ID = 'yybv330g41'   # Microsoft Clarity project (visitor analytics). The official snippet is written to the top of site.js (self-hosted, no inline script, CSP stays strict); its queue stub is required, the tag alone does not start
 LOGO = 'lexonia-pro-clean-commercial-cleaning-logo.png'
 LOGO_DARK = 'lexonia-pro-clean-commercial-cleaning-logo-dark.png'
 OG_IMG = 'img/lexonia-pro-clean-commercial-cleaning-og.jpg'
@@ -846,7 +847,12 @@ js = '''// Mobile menu
   }
 })();
 '''
-open(os.path.join(out, 'site.js'), 'w', encoding='utf-8').write(js)
+clarity_js = ('' if PREVIEW else
+    "// Microsoft Clarity (visitor analytics): official snippet, served from this file so the page needs no inline script\n"
+    "(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};"
+    "t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})"
+    "(window, document, \"clarity\", \"script\", \"%s\");\n" % CLARITY_ID)
+open(os.path.join(out, 'site.js'), 'w', encoding='utf-8').write(clarity_js + js)
 # Guard: Thumbtack appears ONLY as the footer Contact link (owner decision, Oct 14 2026); nowhere else
 for _root, _d, _fs in os.walk(out):
     for _f in _fs:
