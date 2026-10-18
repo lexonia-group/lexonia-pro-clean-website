@@ -28,9 +28,7 @@ SIZES = _json.load(open(os.path.join(here, 'seo_img_map.json')))['sizes']   # ph
 PHONE = '(952) 836-8405'
 TEL = 'tel:+19528368405'
 EMAIL = 'info@lexoniaproclean.com'
-TT_URL = 'https://www.thumbtack.com/mn/eden-prairie/commercial-cleaning/lexonia-pro-clean/service/586412868292583430'   # owner profile; linked ONLY from the footer Contact column (owner, Oct 14 2026)
-FB_URL = 'https://www.facebook.com/profile.php?id=61595444793911'   # Lexonia Pro Clean Facebook Page (created Oct 17 2026): footer link + sameAs
-SAME_AS = [FB_URL]   # official profiles of this business (Google listing added once Google verifies it). Thumbtack stays out: footer link only (owner rule)
+from profiles import SAME_AS, TT_LINK, social_row, SOCIAL_CSS   # outside profiles: footer icons + sameAs, one list, in generator/profiles.py.
 # Cities named on the site and in the schema = the service areas the owner entered on the Google listing (Oct 17 2026). Edit here only.
 CITIES = ['Minneapolis', 'St. Paul', 'Eden Prairie', 'Edina', 'Bloomington', 'Minnetonka', 'Plymouth', 'Maple Grove', 'Golden Valley',
           'St. Louis Park', 'Richfield', 'Wayzata', 'Excelsior', 'Chanhassen', 'Burnsville', 'Eagan', 'Mendota Heights']
@@ -126,11 +124,11 @@ def footer():
             '          <li><a href="services.html">Services</a></li>\n          <li><a href="why-us.html">Why Us</a></li>\n'
             '          <li><a href="how-it-works.html">How It Works</a></li>\n          <li><a href="blog/">Blog</a></li>\n        </ul>\n      </div>\n'
             '      <div>\n        <p class="f-h">Contact</p>\n        <address><ul>\n'
-            '          <li><a href="%s">%s</a></li>\n          <li><a href="mailto:%s">%s</a></li>\n          <li><a href="contact.html">Request a Quote</a></li>\n          <li><a href="%s" target="_blank" rel="noopener">Find us on Thumbtack</a></li>\n          <li><a href="%s" target="_blank" rel="noopener">Follow us on Facebook</a></li>\n'
+            '          <li><a href="%s">%s</a></li>\n          <li><a href="mailto:%s">%s</a></li>\n          <li><a href="contact.html">Request a Quote</a></li>\n          <li class="soc-li">%s</li>\n'
             '        </ul></address>\n      </div>\n'
             '    </div>\n    <div class="footer-bottom">\n      <span>© 2026 Lexonia Pro Clean LLC. All rights reserved.</span>\n      <span>Eden Prairie, Minnesota</span>\n    </div>\n  </div>\n</footer>\n'
             '<div class="mbar" role="group" aria-label="Contact us">\n  <a class="mbar-call" href="%s">%s Call</a>\n  <a class="mbar-quote" href="contact.html">Free Quote</a>\n</div>\n'
-            % (TEL, PHONE, EMAIL, EMAIL, TT_URL, FB_URL, TEL, svg(I_PHONE, 18)))
+            % (TEL, PHONE, EMAIL, EMAIL, social_row(), TEL, svg(I_PHONE, 18)))
 
 def page_hero(kicker, h1, lead):
     _hero_counter[0] += 1
@@ -782,7 +780,7 @@ FONT_CSS = ("@font-face{font-family:'Sora';font-style:normal;font-weight:100 800
 os.makedirs(os.path.join(out, 'fonts'), exist_ok=True)
 for _f in ('sora-latin-wght-normal.woff2', 'inter-latin-wght-normal.woff2'):
     shutil.copyfile(os.path.join(here, 'fonts_src', _f), os.path.join(out, 'fonts', _f))
-open(os.path.join(out, 'styles.css'), 'w', encoding='utf-8').write(FONT_CSS + base + extra + DH.HOW_CSS + BL.BLOCKS_CSS + BLOG.BLOG_CSS)
+open(os.path.join(out, 'styles.css'), 'w', encoding='utf-8').write(FONT_CSS + base + extra + DH.HOW_CSS + BL.BLOCKS_CSS + BLOG.BLOG_CSS + SOCIAL_CSS)
 js = '''// Mobile menu
 (function(){
   var b=document.getElementById('menuBtn'), n=document.getElementById('navLinks');
@@ -910,12 +908,12 @@ clarity_js = ('' if PREVIEW else
     "(window, document, \"clarity\", \"script\", \"%s\");\n" % CLARITY_ID)
 if not PREVIEW: js = js.replace("new Audio('audio/summerhill.mp3')", "new Audio('/audio/summerhill.mp3')")   # blog pages sit below the root
 open(os.path.join(out, 'site.js'), 'w', encoding='utf-8').write(clarity_js + js)
-# Guard: Thumbtack appears ONLY as the footer Contact link (owner decision, Oct 14 2026); nowhere else
+# Guard: Thumbtack appears ONLY as the footer Contact icon (owner decision, Oct 14 2026); nowhere else
 for _root, _d, _fs in os.walk(out):
     for _f in _fs:
         if _f.lower().endswith(('.html', '.js', '.css', '.txt', '.xml', '.toml', '.json', '.svg')):
             _t = open(os.path.join(_root, _f), encoding='utf-8', errors='ignore').read()
-            _t_nolink = _t.replace('<a href="%s" target="_blank" rel="noopener">Find us on Thumbtack</a>' % TT_URL, '')
+            _t_nolink = _t.replace(TT_LINK, '')
             assert 'thumbtack' not in _t_nolink.lower(), 'Thumbtack mention found in ' + _f + ' (only the footer Contact link is allowed)'
             if _f.lower().endswith('.html') and _f not in ('404.html',) and 'footer' in _t:
                 assert _t.count('Find us on Thumbtack') == 1, 'footer Thumbtack link missing or duplicated in ' + _f

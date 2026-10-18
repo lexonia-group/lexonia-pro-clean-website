@@ -5,8 +5,10 @@ from urllib.parse import urlparse, urldefrag
 D='site'
 pages=sorted(os.path.relpath(os.path.join(r,f),D).replace('\\','/') for r,_,fs in os.walk(D) for f in fs if f.endswith('.html'))
 SITE='https://lexoniaproclean.com/'
-# Outside links the owner approved: the footer Thumbtack link (Oct 14 2026), the Facebook Page (Oct 17 2026), Unsplash photo credits on blog articles
-ALLOWED_EXT=('https://www.thumbtack.com/mn/eden-prairie/commercial-cleaning/lexonia-pro-clean/','https://www.facebook.com/profile.php?id=61595444793911','https://unsplash.com/')
+# Outside links the owner approved: the profiles in generator/profiles.py (footer icons), Unsplash photo credits on blog articles
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'generator'))
+from profiles import LINKED as _PROFILE_URLS
+ALLOWED_EXT=tuple(_PROFILE_URLS)+('https://unsplash.com/',)
 # Prices the owner made public as text (Oct 17 2026): from $155 per visit; interior windows $40 / $70 / $110. Any other dollar amount is flagged.
 ALLOWED_PRICES={'$155','$40','$70','$110'}
 UTILITY=('404.html','thanks.html')
