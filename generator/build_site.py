@@ -8,6 +8,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import diagrams_how as DH
 import blocks as BL
 import price_cards as PC
+import blog as BLOG
 
 out, MODE = sys.argv[1], sys.argv[2]
 PREVIEW = MODE == 'preview'
@@ -18,7 +19,7 @@ _sh.copytree(os.path.join(here, 'assets_src'), out, dirs_exist_ok=True)   # phot
 
 import json as _json
 SITE = 'https://lexoniaproclean.com/'
-BUILD_DATE = '2026-10-14'   # update when the content changes: used for sitemap lastmod and dateModified
+BUILD_DATE = '2026-10-18'   # update when the content changes: used for sitemap lastmod and dateModified
 CLARITY_ID = 'yybv330g41'   # Microsoft Clarity project (visitor analytics). The official snippet is written to the top of site.js (self-hosted, no inline script, CSP stays strict); its queue stub is required, the tag alone does not start
 LOGO = 'lexonia-pro-clean-commercial-cleaning-logo.png'
 LOGO_DARK = 'lexonia-pro-clean-commercial-cleaning-logo-dark.png'
@@ -28,6 +29,14 @@ PHONE = '(952) 836-8405'
 TEL = 'tel:+19528368405'
 EMAIL = 'info@lexoniaproclean.com'
 TT_URL = 'https://www.thumbtack.com/mn/eden-prairie/commercial-cleaning/lexonia-pro-clean/service/586412868292583430'   # owner profile; linked ONLY from the footer Contact column (owner, Oct 14 2026)
+FB_URL = 'https://www.facebook.com/profile.php?id=61595444793911'   # Lexonia Pro Clean Facebook Page (created Oct 17 2026): footer link + sameAs
+SAME_AS = [FB_URL]   # official profiles of this business (Google listing added once Google verifies it). Thumbtack stays out: footer link only (owner rule)
+# Cities named on the site and in the schema = the service areas the owner entered on the Google listing (Oct 17 2026). Edit here only.
+CITIES = ['Minneapolis', 'St. Paul', 'Eden Prairie', 'Edina', 'Bloomington', 'Minnetonka', 'Plymouth', 'Maple Grove', 'Golden Valley',
+          'St. Louis Park', 'Richfield', 'Wayzata', 'Excelsior', 'Chanhassen', 'Burnsville', 'Eagan', 'Mendota Heights']
+SUBURBS = ', '.join(CITIES[3:-1]) + ' and ' + CITIES[-1]   # the named suburbs after Minneapolis, St. Paul and Eden Prairie
+HOURS_TEXT = '4 PM to 3 AM, seven days a week'   # cleaning hours, same as the Google listing
+INDEXNOW_KEY = '626ea4651324daaccc90eb9ef9a7094b'   # IndexNow (Bing, Yandex, others): key file served at /<key>.txt; changed URLs are pinged after each deploy. Public by design
 
 # Rotating hero photos: the owner's Site Assets folder (stock office photos), resized to site/img/hero/.
 SLIDES = ['office-open-plan', 'office-desks-computers', 'office-empty-desks-plant', 'office-natural-light',
@@ -93,7 +102,7 @@ I_MENU = '<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="1
 
 # ------------------------------------------------------------------ shared pieces
 NAV = [('services.html', 'Services'), ('why-us.html', 'Why Us'), ('how-it-works.html', 'How It Works'),
-       ('contact.html', 'Contact')]
+       ('blog/', 'Blog'), ('contact.html', 'Contact')]
 
 def header(active):
     links = ''
@@ -112,16 +121,16 @@ def header(active):
 def footer():
     return ('<footer class="site">\n  <div class="container">\n    <div class="footer-grid">\n      <div>\n'
             '        <div class="brand"><img class="logo-img" src="%s" alt="Lexonia Pro Clean, Commercial Cleaning" width="260" height="45" loading="lazy"></div>\n' % LOGO_DARK +
-            '        <p>Commercial cleaning for offices and small retail stores in Eden Prairie and the Twin Cities metro. Insured and background-checked.</p>\n      </div>\n'
+            '        <p>Commercial cleaning and janitorial services for offices and small retail stores across Minneapolis, St. Paul and the suburbs. Based in Eden Prairie. Insured and background-checked.</p>\n      </div>\n'
             '      <div>\n        <p class="f-h">Pages</p>\n        <ul>\n'
             '          <li><a href="services.html">Services</a></li>\n          <li><a href="why-us.html">Why Us</a></li>\n'
-            '          <li><a href="how-it-works.html">How It Works</a></li>\n        </ul>\n      </div>\n'
+            '          <li><a href="how-it-works.html">How It Works</a></li>\n          <li><a href="blog/">Blog</a></li>\n        </ul>\n      </div>\n'
             '      <div>\n        <p class="f-h">Contact</p>\n        <address><ul>\n'
-            '          <li><a href="%s">%s</a></li>\n          <li><a href="mailto:%s">%s</a></li>\n          <li><a href="contact.html">Request a Quote</a></li>\n          <li><a href="%s" target="_blank" rel="noopener">Find us on Thumbtack</a></li>\n'
+            '          <li><a href="%s">%s</a></li>\n          <li><a href="mailto:%s">%s</a></li>\n          <li><a href="contact.html">Request a Quote</a></li>\n          <li><a href="%s" target="_blank" rel="noopener">Find us on Thumbtack</a></li>\n          <li><a href="%s" target="_blank" rel="noopener">Follow us on Facebook</a></li>\n'
             '        </ul></address>\n      </div>\n'
             '    </div>\n    <div class="footer-bottom">\n      <span>© 2026 Lexonia Pro Clean LLC. All rights reserved.</span>\n      <span>Eden Prairie, Minnesota</span>\n    </div>\n  </div>\n</footer>\n'
             '<div class="mbar" role="group" aria-label="Contact us">\n  <a class="mbar-call" href="%s">%s Call</a>\n  <a class="mbar-quote" href="contact.html">Free Quote</a>\n</div>\n'
-            % (TEL, PHONE, EMAIL, EMAIL, TT_URL, TEL, svg(I_PHONE, 18)))
+            % (TEL, PHONE, EMAIL, EMAIL, TT_URL, FB_URL, TEL, svg(I_PHONE, 18)))
 
 def page_hero(kicker, h1, lead):
     _hero_counter[0] += 1
@@ -187,9 +196,9 @@ def box(title, items):
     return ('      <div class="box reveal">\n        <h3>%s</h3>\n        <ul>\n' % title + ''.join('          <li>%s</li>\n' % i for i in items) + '        </ul>\n      </div>\n')
 
 # ---- pricing (source: Operations\\PRICING-MASTER.md, "Commercial - per visit", checked 2026-10-14; owner: multi-story = custom pricing at greater discounts)
-PRICE_ROWS = [('1,000 \u2013 2,000', 155, 163), ('2,000 \u2013 3,000', 220, 231), ('3,000 \u2013 4,000', 270, 284), ('4,000 \u2013 5,000', 340, 357),
-              ('5,000 \u2013 6,000', 410, 431), ('6,000 \u2013 7,000', 480, 504), ('7,000 \u2013 8,000', 540, 567), ('8,000 \u2013 9,000', 610, 641), ('9,000 \u2013 10,000', 670, 704)]
-WIN_ROWS = [('1\u20135 windows', 40), ('6\u201310 windows', 70), ('11\u201315 windows', 110)]
+PRICE_ROWS = [('1,000 – 2,000', 155, 163), ('2,000 – 3,000', 220, 231), ('3,000 – 4,000', 270, 284), ('4,000 – 5,000', 340, 357),
+              ('5,000 – 6,000', 410, 431), ('6,000 – 7,000', 480, 504), ('7,000 – 8,000', 540, 567), ('8,000 – 9,000', 610, 641), ('9,000 – 10,000', 670, 704)]
+WIN_ROWS = [('1–5 windows', 40), ('6–10 windows', 70), ('11–15 windows', 110)]
 PRICE_FROM, PRICE_TOP = PRICE_ROWS[0][1], PRICE_ROWS[-1][1]
 
 PRICE_IMG = PC.render(PRICE_ROWS, WIN_ROWS, os.path.join(out, 'img', 'pricing'), here)   # prices live only in these images, not in page text
@@ -233,7 +242,7 @@ AROUND = ('    <div class="guarantee reveal">\n      <div class="g-icon">%s</div
 
 FAQ = [
     ('What does Lexonia Pro Clean clean?', 'We clean offices and small retail stores and boutiques across the Twin Cities metro: workspaces, common areas, conference rooms, break rooms, restrooms, sales floors, mirrors, fitting rooms and back rooms. Every visit follows a written checklist.'),
-    ('Where is Lexonia Pro Clean based, and where do you work?', 'We are based in Eden Prairie, Minnesota, and serve the Twin Cities metro. If you are just outside it, ask anyway.'),
+    ('Where is Lexonia Pro Clean based, and where do you work?', 'We are based in Eden Prairie, Minnesota, and serve Minneapolis, St. Paul and the suburbs, including ' + SUBURBS + '. If you are just outside the metro, ask anyway.'),
     ('When do you clean?', 'Evenings and nights, when your business is closed, so we are never in your way.'),
     ('Do you bring your own supplies and equipment?', 'Yes. We bring the cleaning liquids and our own equipment. All of it is included in the price, with no surprise fees and no travel charges.'),
     ('Who supplies trash bags, soap and paper towels?', 'Your company or building management supplies the consumables: trash bags, soap, paper towels, tissue and restroom disposal bags. We do not supply or buy them. We restock them from your supply every visit and tell you when something is running low.'),
@@ -290,7 +299,7 @@ hero_svg = ('<svg class="bubbles" width="100%" height="100%" viewBox="0 0 1200 6
             '<circle cx="180" cy="500" r="100" fill="rgba(139,227,236,.05)"/><circle cx="80" cy="90" r="46" fill="rgba(53,194,207,.09)"/>'
             '<circle cx="620" cy="60" r="26" fill="rgba(139,227,236,.10)"/></svg>')
 home = ('<main id="top">\n<section class="hero" style="padding-top:110px">\n  ' + hero_svg + '\n  <div class="container hero-grid">\n    <div>\n'
-    '      <span class="kicker" style="color:var(--cyan)">Eden Prairie &amp; Twin Cities · Commercial Cleaning</span>\n'
+    '      <span class="kicker" style="color:var(--cyan)">Twin Cities · Commercial Cleaning &amp; Janitorial</span>\n'
     '      <h1>A Cleaner Workplace.<br>A <span class="accent">Sharper</span> First Impression.</h1>\n'
     '      <p class="lead">Lexonia Pro Clean keeps Twin Cities offices and small retail stores consistently spotless — with background-checked crews, a written checklist for every visit, and a same-day response to every message.</p>\n'
     '      <div class="hero-actions">\n        <a href="contact.html" class="btn btn-primary">Get a Free Quote ' + svg(I_ARROW, 18, 2.2) + '</a>\n        <a href="services.html" class="btn btn-light">Our Services</a>\n      </div>\n'
@@ -314,7 +323,7 @@ home = ('<main id="top">\n<section class="hero" style="padding-top:110px">\n  ' 
     + figure('lexonia-pro-clean-sink-area-before-and-after.jpg', ba_alt('Sink area'), 'Sink area')
     + '    </div>\n    <p class="more"><a href="services.html#our-work" class="btn btn-ghost">More photos</a></p>\n  </div>\n</section>\n\n'
     '<section class="industries">\n  <div class="container center">\n    <span class="kicker">Who We Serve</span>\n    <h2 class="section-title">Built for Offices and Boutiques</h2>\n'
-    '    <p class="section-lead" style="margin:0 auto">Every space has different standards. We tailor the checklist and the schedule to yours.</p>\n' + pills() + '    <p class="price-tease" style="margin-top:30px">Based in Eden Prairie, serving the Twin Cities metro.</p>\n  </div>\n</section>\n\n'
+    '    <p class="section-lead" style="margin:0 auto">Every space has different standards. We tailor the checklist and the schedule to yours.</p>\n' + pills() + '    <p class="price-tease" style="margin-top:30px">Based in Eden Prairie, serving Minneapolis, St. Paul and the suburbs: ' + SUBURBS + '.</p>\n  </div>\n</section>\n\n'
     + reviews_section() + '\n' + cta_band() + '</main>\n')
 pages['index.html'] = dict(title='Lexonia Pro Clean | Commercial Cleaning for Offices and Small Retail — Twin Cities, MN',
     desc='Commercial cleaning for offices and small retail stores across the Twin Cities metro. Insured, background-checked crews. Free walkthrough, then a written scope and exact price within 24 hours.',
@@ -412,8 +421,8 @@ FONTS = ('<link rel="preload" href="fonts/sora-latin-wght-normal.woff2" as="font
          '<link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>\n')
 # ------------------------------------------------------------------ SEO / GEO
 META = {
-    'index.html': dict(title='Commercial Cleaning Twin Cities MN | Lexonia Pro Clean', path='',
-        desc='Commercial cleaning for offices and small retail stores in Eden Prairie and the Twin Cities. Insured, background-checked crews. Free walkthrough.'),
+    'index.html': dict(title='Commercial Cleaning & Janitorial Services | Twin Cities MN', path='',
+        desc='Commercial cleaning and janitorial services for offices and small retail stores in Minneapolis, St. Paul and the suburbs. Insured crews. Free walkthrough.'),
     'services.html': dict(title='Office & Retail Cleaning Services | Lexonia Pro Clean', path='services.html',
         desc='Recurring office and small retail cleaning in the Twin Cities, priced per visit by size of space, on a written checklist. Liquids and equipment included.'),
     'why-us.html': dict(title='Why Choose Lexonia Pro Clean | Commercial Cleaning MN', path='why-us.html',
@@ -436,15 +445,17 @@ SERVICES_LD = [
     ('Floor-by-floor cleaning for multi-story buildings', 'A different floor, or two floors, cleaned each night, so the whole building is cleaned once every 1-2 weeks, depending on what it needs.'),
     ('Interior window cleaning (add-on)', 'Interior windows can be added to a recurring cleaning visit.'),
 ]
-AREA_LD = [{'@type': 'City', 'name': 'Eden Prairie', 'containedInPlace': {'@type': 'State', 'name': 'Minnesota'}},
-           {'@type': 'AdministrativeArea', 'name': 'Twin Cities metro, Minnesota'}]
+AREA_LD = [{'@type': 'City', 'name': c, 'containedInPlace': {'@type': 'State', 'name': 'Minnesota'}} for c in CITIES] + \
+          [{'@type': 'AdministrativeArea', 'name': 'Twin Cities metro, Minnesota'}]
 def business_ld(full=True):
     b = {'@type': ['LocalBusiness', 'ProfessionalService'], '@id': BIZ_ID, 'name': 'Lexonia Pro Clean', 'url': SITE}
     if not full: return b
     b.update({'legalName': 'Lexonia Pro Clean LLC',
-        'description': 'Commercial cleaning for offices and small retail stores in Eden Prairie, Minnesota and the Twin Cities metro. Recurring service on a written checklist, evenings and nights, with insured, background-checked crews.',
+        'description': 'Commercial cleaning and janitorial services for offices and small retail stores across Minneapolis, St. Paul and the Twin Cities suburbs, based in Eden Prairie, Minnesota. Recurring service on a written checklist, evenings and nights, with insured, background-checked crews.',
+        'knowsAbout': ['Commercial cleaning', 'Janitorial services', 'Office cleaning', 'Retail store cleaning'],
+        'openingHoursSpecification': [{'@type': 'OpeningHoursSpecification', 'dayOfWeek': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], 'opens': '16:00', 'closes': '03:00'}],
         'logo': {'@type': 'ImageObject', 'url': SITE + LOGO}, 'image': [SITE + OG_IMG],
-        'telephone': '+1-952-836-8405', 'email': EMAIL,
+        'telephone': '+1-952-836-8405', 'email': EMAIL, 'sameAs': SAME_AS,
         'address': {'@type': 'PostalAddress', 'addressLocality': 'Eden Prairie', 'addressRegion': 'MN', 'addressCountry': 'US'},
         'areaServed': AREA_LD,
         'geo': {'@type': 'GeoCoordinates', 'latitude': 44.8547, 'longitude': -93.4708},   # Eden Prairie city centre, not a street address
@@ -518,6 +529,39 @@ def render(name, p):
 for name, p in pages.items():
     open(os.path.join(out, name), 'w', encoding='utf-8').write(render(name, p))
 
+import re as _re_links
+def root_links(doc):
+    # pages below the site root (blog/...): every site link, image and photo list must start at the root
+    doc = _re_links.sub(r'(href|src)="(?!https?:|mailto:|tel:|/|#|data:)', r'\1="/', doc)
+    doc = _re_links.sub(r'srcset="([^"]*)"', lambda m: 'srcset="' + ', '.join(c if c.startswith(('/', 'http')) else '/' + c for c in m.group(1).split(', ')) + '"', doc)
+    doc = _re_links.sub(r'data-slides="([^"]*)"', lambda m: 'data-slides="' + ','.join(u if u.startswith('/') else '/' + u for u in m.group(1).split(',')) + '"', doc)
+    return doc
+
+def render_page(p):
+    # blog pages: same header, footer, styles and scripts as the rest of the site, with their own structured data and link-card image
+    import html as _h
+    url = SITE + p['path']
+    t, d = _h.escape(p['title'], quote=True), _h.escape(p['desc'], quote=True)
+    og_url, ow, oh, oalt = p['og_img'] if p.get('og_img') else (SITE + OG_IMG, 1200, 630, 'Break room island before and after cleaning by Lexonia Pro Clean')
+    meta = '<meta name="description" content="%s">\n' % d
+    meta += ('<link rel="canonical" href="%s">\n<meta name="robots" content="index, follow, max-image-preview:large">\n'
+             '<meta property="og:type" content="%s">\n<meta property="og:site_name" content="Lexonia Pro Clean">\n<meta property="og:locale" content="en_US">\n'
+             '<meta property="og:title" content="%s">\n<meta property="og:description" content="%s">\n<meta property="og:url" content="%s">\n'
+             '<meta property="og:image" content="%s">\n<meta property="og:image:width" content="%d">\n<meta property="og:image:height" content="%d">\n'
+             '<meta property="og:image:alt" content="%s">\n'
+             '<meta name="twitter:card" content="summary_large_image">\n<meta name="twitter:title" content="%s">\n<meta name="twitter:description" content="%s">\n<meta name="twitter:image" content="%s">\n'
+             '<meta name="theme-color" content="#0b2545">\n<meta name="geo.region" content="US-MN">\n<meta name="geo.placename" content="Eden Prairie">\n'
+             % (url, p.get('og_type', 'website'), t, d, url, og_url, ow, oh, _h.escape(oalt, quote=True), t, d, og_url))
+    if p.get('published'):
+        meta += '<meta property="article:published_time" content="%s">\n' % p['published']
+    meta += '<link rel="alternate" type="application/rss+xml" title="Lexonia Pro Clean guides" href="%sblog/feed.xml">\n' % SITE
+    icons = ('<link rel="icon" type="image/svg+xml" href="icon.svg">\n<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">\n'
+             '<link rel="apple-touch-icon" href="apple-touch-icon.png">\n')
+    ld = '<script type="application/ld+json">\n' + _json.dumps({'@context': 'https://schema.org', '@graph': p['ld']}, ensure_ascii=False, indent=1) + '\n</script>\n'
+    head = ('<!DOCTYPE html>\n<html lang="en-US">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
+            '<title>%s</title>\n%s%s%s<link rel="stylesheet" href="styles.css">\n</head>\n<body>\n' % (p['title'].replace('&', '&amp;'), meta, icons, FONTS))
+    return head + header(p['active']) + p['body'] + footer() + ld + '<script src="site.js" defer></script>\n</body>\n</html>\n'
+
 
 # ---- crawl files (live site only)
 if not PREVIEW:
@@ -533,6 +577,7 @@ if not PREVIEW:
     open(os.path.join(out, '404.html'), 'w', encoding='utf-8').write(nf)
     open(os.path.join(out, 'robots.txt'), 'w', encoding='utf-8').write(
         'User-agent: *\nAllow: /\nDisallow: /img/pricing/\n\nSitemap: %ssitemap.xml\n' % SITE)
+    open(os.path.join(out, INDEXNOW_KEY + '.txt'), 'w', encoding='utf-8').write(INDEXNOW_KEY)   # IndexNow ownership check
     imgs = {'': [(i[0], i[2]) for i in LOOP[:8]],
             'services.html': [('img/lexonia-pro-clean-break-room-island-before-and-after.jpg', 'Break room island, before and after cleaning'),
                               ('img/lexonia-pro-clean-break-room-counter-before-and-after.jpg', 'Break room counter, before and after cleaning'),
@@ -540,20 +585,27 @@ if not PREVIEW:
                               ('img/lexonia-pro-clean-sink-detail-before-and-after.jpg', 'Sink detail, before and after cleaning'),
                               ('img/lexonia-pro-clean-janitorial-caddy-supplies.jpg', 'Janitorial caddy stocked with cleaning supplies'),
                               ('img/lexonia-pro-clean-cleaning-cart-and-vacuum.jpg', 'Cleaning cart with mop bucket and vacuum')]}
+    POSTS = BLOG.build(out, here, dict(SITE=SITE, BIZ_ID=BIZ_ID, business_ld=business_ld, page_hero=page_hero, cta_band=cta_band,
+                                       render_page=render_page, root_links=root_links))
     import html as _h2
     urls = ''
     for n in ['index.html', 'services.html', 'why-us.html', 'how-it-works.html', 'contact.html']:
         path = pages[n]['path']
         im = ''.join('    <image:image><image:loc>%s%s</image:loc><image:caption>%s, Lexonia Pro Clean</image:caption></image:image>\n' % (SITE, i, _h2.escape(c)) for i, c in imgs.get(path, []))
         urls += '  <url>\n    <loc>%s%s</loc>\n    <lastmod>%s</lastmod>\n%s  </url>\n' % (SITE, path, today, im)
+    if POSTS:
+        urls += '  <url>\n    <loc>%sblog/</loc>\n    <lastmod>%s</lastmod>\n  </url>\n' % (SITE, max(p['date'] for p in POSTS))
+        for _p in POSTS:
+            urls += '  <url>\n    <loc>%sblog/%s/</loc>\n    <lastmod>%s</lastmod>\n  </url>\n' % (SITE, _p['slug'], _p.get('updated', _p['date']))
     open(os.path.join(out, 'sitemap.xml'), 'w', encoding='utf-8').write(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' + urls + '</urlset>\n')
     llms = ('# Lexonia Pro Clean\n\n'
-        '> Commercial cleaning for offices and small retail stores in Eden Prairie, Minnesota and the Twin Cities metro. Insured, background-checked crews, a written checklist every visit, evenings and nights.\n\n'
+        '> Commercial cleaning and janitorial services for offices and small retail stores across Minneapolis, St. Paul and the Twin Cities suburbs, based in Eden Prairie, Minnesota. Insured, background-checked crews, a written checklist every visit, evenings and nights.\n\n'
         'Lexonia Pro Clean LLC is based in Eden Prairie, MN and serves the Twin Cities metro. If a business is just outside the metro, it can still ask.\n\n'
         '## Key facts\n\n'
         '- Who we serve: offices and small retail stores and boutiques.\n'
-        '- Where: based in Eden Prairie, serving the Twin Cities metro. A business just outside the metro can still ask.\n'
+        '- Where: based in Eden Prairie, serving Minneapolis, St. Paul and the suburbs: ' + ', '.join(CITIES[2:]) + '. A business just outside the metro can still ask.\n'
+        '- Cleaning hours: ' + HOURS_TEXT + '.\n'
         '- What we do: recurring commercial cleaning on a written checklist, with a completed copy left on site after every visit. Restrooms, break rooms, workspaces, common areas, conference rooms, sales floors, mirrors and fitting rooms.\n'
         '- When: evenings and nights, when the business is closed.\n'
         '- Pricing: a free walkthrough, then a written scope and an exact price within 24 hours. No surprise fees and no travel charges. Recurring cleaning up to 10,000 sq ft is priced per visit by size of space, weekly or every other week, before sales tax; the current price card is on the Services page. Interior windows are an add-on, priced by the number of windows. Daily cleaning, or a space over 10,000 sq ft: a flat monthly contract quoted after the walkthrough. Multi-story buildings: custom pricing, at greater discounts. For an exact price, request a free quote.\n'
@@ -570,7 +622,11 @@ if not PREVIEW:
         '- [Services](%sservices.html): what is cleaned every visit, multi-story buildings, photos.\n'
         '- [Why Us](%swhy-us.html): how Lexonia Pro Clean works, customer reviews.\n'
         '- [How It Works](%show-it-works.html): the process from first call to first clean, and frequently asked questions.\n'
-        '- [Contact](%scontact.html): free quote request.\n') % (PHONE, EMAIL, SITE, SITE, SITE, SITE, SITE)
+        '- [Contact](%scontact.html): free quote request.\n'
+        '- [Blog](%sblog/): guides for office and store managers: cleaning scope, frequency, pricing.\n') % (PHONE, EMAIL, SITE, SITE, SITE, SITE, SITE, SITE)
+    llms += '\n## Official profiles\n\n' + ''.join('- %s\n' % u for u in SAME_AS)
+    if POSTS:
+        llms += '\n## Blog articles\n\n' + ''.join('- [%s](%sblog/%s/): %s\n' % (_p['title'], SITE, _p['slug'], _p['description']) for _p in POSTS)
     open(os.path.join(out, 'llms.txt'), 'w', encoding='utf-8').write(llms)
 
 # ------------------------------------------------------------------ css + js
@@ -726,7 +782,7 @@ FONT_CSS = ("@font-face{font-family:'Sora';font-style:normal;font-weight:100 800
 os.makedirs(os.path.join(out, 'fonts'), exist_ok=True)
 for _f in ('sora-latin-wght-normal.woff2', 'inter-latin-wght-normal.woff2'):
     shutil.copyfile(os.path.join(here, 'fonts_src', _f), os.path.join(out, 'fonts', _f))
-open(os.path.join(out, 'styles.css'), 'w', encoding='utf-8').write(FONT_CSS + base + extra + DH.HOW_CSS + BL.BLOCKS_CSS)
+open(os.path.join(out, 'styles.css'), 'w', encoding='utf-8').write(FONT_CSS + base + extra + DH.HOW_CSS + BL.BLOCKS_CSS + BLOG.BLOG_CSS)
 js = '''// Mobile menu
 (function(){
   var b=document.getElementById('menuBtn'), n=document.getElementById('navLinks');
@@ -852,6 +908,7 @@ clarity_js = ('' if PREVIEW else
     "(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};"
     "t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})"
     "(window, document, \"clarity\", \"script\", \"%s\");\n" % CLARITY_ID)
+if not PREVIEW: js = js.replace("new Audio('audio/summerhill.mp3')", "new Audio('/audio/summerhill.mp3')")   # blog pages sit below the root
 open(os.path.join(out, 'site.js'), 'w', encoding='utf-8').write(clarity_js + js)
 # Guard: Thumbtack appears ONLY as the footer Contact link (owner decision, Oct 14 2026); nowhere else
 for _root, _d, _fs in os.walk(out):

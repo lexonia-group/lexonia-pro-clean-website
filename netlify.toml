@@ -1,6 +1,12 @@
 # Lexonia Pro Clean — Netlify configuration (this file sits above the published site/ folder, so it is never served)
 [build]
   publish = "site"
+  # Netlify builds the site from the generator on every push (Oct 18 2026), so a blog article can be added as one Markdown file.
+  # Articles go live on their date (US Central): the weekly publisher pushes on that day.
+  command = "python3 generator/build_site.py site deploy"
+
+[build.environment]
+  PYTHON_VERSION = "3.12"
 
 # Security headers on every page and file (Clarity analytics domains allowed in script-src, img-src and connect-src; no inline scripts)
 [[headers]]

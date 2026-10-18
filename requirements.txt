@@ -1,0 +1,2 @@
+# Site generator dependencies, installed by Netlify before each build
+Pillow==11.3.0

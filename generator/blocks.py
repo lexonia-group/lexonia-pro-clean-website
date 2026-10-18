@@ -84,9 +84,10 @@ footer.site ul a{display:inline-block;padding:9px 0}
 .more-link{padding:10px 0;margin-top:0}
 .price-tease a,.multi a:not(.btn),.contact-item a,.pcard-link,.pt-then a{display:inline-block;padding:8px 0}
 @media (max-width:560px){
-  .nav-links{justify-content:space-between;margin:0 -4px;gap:0}
-  .nav-links a{padding:12px 9px;font-size:.9rem}
+  .nav-links{justify-content:space-between;margin:0 -12px;gap:0;flex-wrap:wrap}
+  .nav-links a{padding:12px 6px;font-size:.84rem}
 }
+@media (max-width:350px){.nav-links{justify-content:center}}
 /* ---- colour contrast (WCAG AA) and footer headings ---- */
 .kicker{color:#0a6d77}
 .nav-links a.active{color:#0a6d77}

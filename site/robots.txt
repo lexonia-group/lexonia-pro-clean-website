@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /img/pricing/
-
-Sitemap: https://lexoniaproclean.com/sitemap.xml

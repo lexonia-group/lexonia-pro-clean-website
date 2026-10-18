@@ -3,8 +3,15 @@ import os, re, json, sys
 from html.parser import HTMLParser
 from urllib.parse import urlparse, urldefrag
 D='site'
-pages=sorted(f for f in os.listdir(D) if f.endswith('.html'))
+pages=sorted(os.path.relpath(os.path.join(r,f),D).replace('\\','/') for r,_,fs in os.walk(D) for f in fs if f.endswith('.html'))
 SITE='https://lexoniaproclean.com/'
+# Outside links the owner approved: the footer Thumbtack link (Oct 14 2026), the Facebook Page (Oct 17 2026), Unsplash photo credits on blog articles
+ALLOWED_EXT=('https://www.thumbtack.com/mn/eden-prairie/commercial-cleaning/lexonia-pro-clean/','https://www.facebook.com/profile.php?id=61595444793911','https://unsplash.com/')
+# Prices the owner made public as text (Oct 17 2026): from $155 per visit; interior windows $40 / $70 / $110. Any other dollar amount is flagged.
+ALLOWED_PRICES={'$155','$40','$70','$110'}
+UTILITY=('404.html','thanks.html')
+def as_file(path):
+    return path+'index.html' if path.endswith('/') or path=='' else path
 class P(HTMLParser):
     def __init__(s):
         super().__init__(); s.links=[];s.ids=set();s.imgs=[];s.title='';s._t=False;s.meta={};s.canon=None;s.h=[];s._h=None;s.ld=[];s._ld=False;s.scripts=[];s.inline_js=0;s.handlers=[];s.lang=None;s.ext=[];s.forms=[];s.styles_inline=0
@@ -52,13 +59,13 @@ for f,(p,s) in R.items():
         if href.startswith(('mailto:','tel:')): continue
         if href.startswith('http'):
             if tgt=='_blank' and not (rel and 'noopener' in rel): bad(f,'external _blank without noopener: '+href)
-            if 'lexoniaproclean.com' not in href: bad(f,'external link: '+href)
+            if 'lexoniaproclean.com' not in href and not href.startswith(ALLOWED_EXT): bad(f,'external link: '+href)
             continue
         path,frag=urldefrag(href); path=path or f
         if path.startswith('/'): path=path[1:]
-        if path=='' : path='index.html'
+        path=as_file(path)
         if path not in files: bad(f,'broken link '+href); continue
-        if frag and path.endswith('.html'):
+        if frag and path.endswith('.html') and path in R:
             if frag not in R[path][0].ids: bad(f,'missing anchor %s#%s'%(path,frag))
     # images
     for a in p.imgs:
@@ -70,30 +77,34 @@ for f,(p,s) in R.items():
     # seo
     t=p.title.strip(); d=p.meta.get('description','')
     if not (20<=len(t)<=62): bad(f,'title length %d: %s'%(len(t),t))
-    if not (70<=len(d)<=165): bad(f,'description length %d'%len(d))
+    if f not in UTILITY and not (70<=len(d)<=165): bad(f,'description length %d'%len(d))
     h1=[x for x in p.h if x[0]=='h1']
-    if len(h1)!=1 and f not in('404.html','thanks.html'): bad(f,'h1 count %d'%len(h1))
+    if len(h1)!=1 and f not in UTILITY: bad(f,'h1 count %d'%len(h1))
     if not p.lang: bad(f,'no lang')
     if 'viewport' not in p.meta: bad(f,'no viewport')
-    if f not in('404.html','thanks.html'):
+    if f not in UTILITY:
         if not p.canon: bad(f,'no canonical')
         for k in('og:title','og:description','og:image','og:url','twitter:card'):
             if k not in p.meta: bad(f,'missing '+k)
     else:
         if 'noindex' not in (p.meta.get('robots') or ''): bad(f,'utility page should be noindex')
-    for k,v in p.ext: bad(f,'external resource: '+v)
+    for k,v in p.ext:
+        if v not in (p.canon,) and not v.startswith(SITE): bad(f,'external resource: '+v)
     for j in p.ld:
         try: json.loads(j)
         except Exception as e: bad(f,'JSON-LD invalid: %s'%e)
     if p.inline_js: bad(f,'inline scripts: %d'%p.inline_js)
     if p.handlers: bad(f,'inline handlers: %s'%p.handlers[:3])
     low=s.lower()
-    for term in('thumbtack','service-area','windex','lysol','tt-card','lorem','todo','xxx'):
+    if s.count('Find us on Thumbtack')!=(0 if f in UTILITY and 'Find us on Thumbtack' not in s else 1): bad(f,'footer Thumbtack link missing or duplicated')
+    if low.replace('find us on thumbtack','').replace('thumbtack.com/mn/eden-prairie/commercial-cleaning/lexonia-pro-clean/','').count('thumbtack'): bad(f,'Thumbtack mentioned outside the footer link')
+    for term in('service-area','windex','lysol','tt-card','lorem','todo','xxx'):
         if term in low: bad(f,'leftover term: '+term)
-    # dollar amounts in text (prices must be images only)
+    # dollar amounts in text: only the prices the owner made public
     txt=re.sub(r'<script.*?</script>|<style.*?</style>','',s,flags=re.S); txt=re.sub(r'<[^>]+>',' ',txt)
     m=re.findall(r'\$\s?\d[\d,]*',txt)
-    if m: bad(f,'dollar amounts in text: %s'%m[:5])
+    m=[x.replace(' ','') for x in m if x.replace(' ','') not in ALLOWED_PRICES]
+    if m: bad(f,'dollar amount not on the approved list: %s'%m[:5])
 # titles / descriptions unique
 ts={f:R[f][0].title.strip() for f in R}; ds={f:R[f][0].meta.get('description') for f in R}
 if len(set(ts.values()))!=len(ts): bad('*','duplicate titles')
@@ -102,19 +113,19 @@ if len(set(ds.values()))!=len(ds): bad('*','duplicate descriptions')
 sm=open(os.path.join(D,'sitemap.xml'),encoding='utf-8').read()
 locs=re.findall(r'<loc>([^<]+)</loc>',sm)
 for l in locs:
-    path=l.replace(SITE,'') or 'index.html'
+    path=as_file(l.replace(SITE,''))
     if l.endswith('.jpg') or l.endswith('.png'):
         if path not in files: bad('sitemap','image missing '+l)
     elif path not in files: bad('sitemap','url missing '+l)
 for f in pages:
-    if f in('404.html','thanks.html'): continue
-    u=SITE+('' if f=='index.html' else f)
+    if f in UTILITY: continue
+    u=SITE+('' if f=='index.html' else f[:-len('index.html')] if f.endswith('/index.html') else f)
     if u not in locs: bad('sitemap','page not listed '+f)
 rb=open(os.path.join(D,'robots.txt')).read()
 if 'Sitemap:' not in rb: bad('robots','no sitemap line')
 ll=open(os.path.join(D,'llms.txt'),encoding='utf-8').read()
 for l in re.findall(r'\]\((https?://[^)]+)\)',ll):
-    path=l.replace(SITE,'') or 'index.html'
+    path=as_file(l.replace(SITE,''))
     if path not in files: bad('llms.txt','dead link '+l)
 print('pages:',pages)
 print('ISSUES (%d):'%len(issues))

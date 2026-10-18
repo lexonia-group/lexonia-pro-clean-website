@@ -1,3 +1,5 @@
 .netlify
 __pycache__/
 *.pyc
+# Built by Netlify from generator/ and content/ on every push (Oct 18 2026); build locally with: python3 generator/build_site.py site deploy
+site/
