@@ -1,7 +1,7 @@
 ---
 title: What Does Commercial Office Cleaning Include?
 slug: what-does-office-cleaning-include
-date: 2026-10-18
+date: 2026-10-29
 description: A room-by-room look at what a recurring office cleaning visit covers, what it does not, and who supplies what.
 category: Office cleaning know-how
 photo: img/lexonia-pro-clean-janitorial-caddy-supplies.jpg

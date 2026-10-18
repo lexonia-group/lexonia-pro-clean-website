@@ -23,6 +23,7 @@ netlify.toml security headers, cache rules, publish directory (sits above site/,
 
 - Every sentence traces to what the owner said or to the real commercial checklist. Nothing invented. "Insured" and "background-checked" are true; "licensed" is not.
 - Prices: owner decision Oct 17 2026, prices may be public as text. Approved amounts: from $155 per visit (1,000-2,000 sq ft, weekly, plus tax); interior windows $40 / $70 / $110. qa/qa_static.py flags any other dollar amount.
+- Blog cadence (owner, Oct 18 2026): ONE article goes live per week, dated to its Thursday, the same day its Facebook post links it. Never publish several at once.
 - Blog: facts only (what the owner stated, the real checklist); general photos from Unsplash with no faces and the photographer credited; educational topics only: before-and-after job photos go to social posts, never to the blog (owner, Oct 18 2026). Wording: "offices and small retail stores across the Twin Cities and suburbs".
 - No brand names of products. Do not list what the crew brings.
 - Never appear on the site: floor or carpet care, disinfection services or EPA claims, post-construction, one-time or emergency cleans, HEPA or eco claims, photo-verified reports.

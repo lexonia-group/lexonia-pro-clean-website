@@ -1,7 +1,7 @@
 ---
 title: How After-Hours Office Cleaning Works
 slug: how-after-hours-office-cleaning-works
-date: 2026-10-18
+date: 2026-11-12
 description: What happens when your office is cleaned in the evening or at night, how to prepare for the first visit, and how you know what was done.
 category: Office cleaning know-how
 photo: https://images.unsplash.com/photo-1764307442837-84fef9ec1372?w=1600&q=80&fm=jpg

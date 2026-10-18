@@ -1,7 +1,7 @@
 ---
 title: How Is Office Cleaning Priced? What Sets the Cost
 slug: how-is-office-cleaning-priced
-date: 2026-10-18
+date: 2026-11-05
 description: How recurring office and small retail cleaning is priced in the Twin Cities: per visit by size, the add-ons, and when a monthly contract fits.
 category: Cost and contracts
 photo: https://images.unsplash.com/photo-1762319069227-443a1a1095b5?w=1600&q=80&fm=jpg

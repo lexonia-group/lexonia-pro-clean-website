@@ -27,4 +27,5 @@ Position = place of the first lexoniaproclean.com result in the web search list;
 - Queries 3-13: "-" everywhere. Who shows instead: Anago (one page per city and service term, e.g. Eden Prairie, Minneapolis janitorial), JAN-PRO Twin Cities (city articles: Bloomington office cleaning), SERVPRO, HomeAdvisor, press releases (Health Point).
 - Site wording gap: "Minneapolis" appeared 0 times; "janitorial" only in photo captions.
 - Changed in this deploy: home title and description lead with commercial cleaning and janitorial services; Minneapolis, St. Paul and the 14 named suburbs (the Google listing's service areas) on the home page, FAQ, footer, schema and llms.txt; hours 4 PM-3 AM in schema; IndexNow key file; blog with 4 guides; phone nav fits five tabs.
+- Correction, same day: the owner's plan is ONE article per week. Three guides were re-dated to the Thursdays their Facebook posts go out (Oct 29, Nov 5, Nov 12); "How Often Should a Small Office Be Cleaned?" stays live as this week's article.
 - Next: Google Search Console and Bing Webmaster Tools (owner enables), Bing Places and Yelp listings, Google listing link in sameAs once verified.
