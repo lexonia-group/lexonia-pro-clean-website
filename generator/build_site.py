@@ -905,11 +905,19 @@ js = '''// Mobile menu
   }
 })();
 '''
+# The owner's own browsers are not recorded in Clarity (owner decision, Oct 19 2026). Each entry is the Clarity visitor ID of one of his
+# browsers (Clarity's own first-party cookie): 1kx91bs = his Chrome, 150xde1 = the Claude browser on his computer.
+# A new browser, a phone or cleared cookies gets a new ID: add it here. A matching browser also gets a 400-day marker cookie,
+# renewed on every visit, so the exclusion holds after Clarity's own cookie expires.
+OWNER_CLARITY_IDS = ['1kx91bs', '150xde1']
 clarity_js = ('' if PREVIEW else
     "// Microsoft Clarity (visitor analytics): official snippet, served from this file so the page needs no inline script\n"
+    "// The owner's own browsers are skipped (their Clarity visitor IDs are listed in the site generator)\n"
+    "(function(){var d=document,own=%s,m=d.cookie.match(/(?:^|; )_clck=([^;]+)/),id=m?decodeURIComponent(m[1]).split(/[|^]/)[0]:'';"
+    "if(own.indexOf(id)>-1||/(?:^|; )lpc_owner=1/.test(d.cookie)){d.cookie='lpc_owner=1; max-age=34560000; path=/; secure; samesite=lax';return;}\n"
     "(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};"
     "t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})"
-    "(window, document, \"clarity\", \"script\", \"%s\");\n" % CLARITY_ID)
+    "(window, document, \"clarity\", \"script\", \"%s\");})();\n" % (_json.dumps(OWNER_CLARITY_IDS), CLARITY_ID))
 if not PREVIEW: js = js.replace("new Audio('audio/summerhill.mp3')", "new Audio('/audio/summerhill.mp3')")   # blog pages sit below the root
 open(os.path.join(out, 'site.js'), 'w', encoding='utf-8').write(clarity_js + js)
 # Guard: Thumbtack appears ONLY as the footer Contact icon (owner decision, Oct 14 2026); nowhere else
