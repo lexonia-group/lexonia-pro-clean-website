@@ -50,3 +50,13 @@
   for = "/img/pricing/*"
   [headers.values]
     X-Robots-Tag = "noindex, noimageindex"
+
+# Visitors from India see a short "not available in your region" page at every address (owner decision, Oct 19 2026: local Twin Cities business).
+# Netlify matches the visitor's country at its edge. To block another country, add its two-letter code to the list, e.g. ["IN", "PK"].
+# The page lives in generator/assets_src/unavailable.html (no scripts, no contact details, not indexed).
+[[redirects]]
+  from = "/*"
+  to = "/unavailable.html"
+  status = 404
+  force = true
+  conditions = {Country = ["IN"]}
