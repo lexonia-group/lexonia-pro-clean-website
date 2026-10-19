@@ -9,6 +9,7 @@ import diagrams_how as DH
 import blocks as BL
 import price_cards as PC
 import blog as BLOG
+import privacy as PV   # privacy notice page; describes what the site actually collects
 
 out, MODE = sys.argv[1], sys.argv[2]
 PREVIEW = MODE == 'preview'
@@ -126,7 +127,7 @@ def footer():
             '      <div>\n        <p class="f-h">Contact</p>\n        <address><ul>\n'
             '          <li><a href="%s">%s</a></li>\n          <li><a href="mailto:%s">%s</a></li>\n          <li><a href="contact.html">Request a Quote</a></li>\n          <li class="soc-li">%s</li>\n'
             '        </ul></address>\n      </div>\n'
-            '    </div>\n    <div class="footer-bottom">\n      <span>© 2026 Lexonia Pro Clean LLC. All rights reserved.</span>\n      <span>Eden Prairie, Minnesota</span>\n    </div>\n  </div>\n</footer>\n'
+            '    </div>\n    <div class="footer-bottom">\n      <span>© 2026 Lexonia Pro Clean LLC. All rights reserved. · <a href="privacy.html">Privacy</a></span>\n      <span>Eden Prairie, Minnesota</span>\n    </div>\n  </div>\n</footer>\n'
             '<div class="mbar" role="group" aria-label="Contact us">\n  <a class="mbar-call" href="%s">%s Call</a>\n  <a class="mbar-quote" href="contact.html">Free Quote</a>\n</div>\n'
             % (TEL, PHONE, EMAIL, EMAIL, social_row(), TEL, svg(I_PHONE, 18)))
 
@@ -414,6 +415,9 @@ thanks = ('<main id="top">\n' + page_hero('Thank you', 'Request Received', 'Than
     + '<section>\n  <div class="container center"><p><a href="index.html" class="btn btn-primary">Back to the Home Page</a></p></div>\n</section>\n</main>\n')
 pages['thanks.html'] = dict(title='Thank You | Lexonia Pro Clean', desc='Your request was received.', active='', body=thanks, noindex=True)
 
+# ---- PRIVACY (text and rules live in generator/privacy.py)
+pages['privacy.html'] = dict(title=PV.TITLE, desc=PV.DESC, active='', path='privacy.html', body=PV.body(page_hero, EMAIL, PHONE, TEL))
+
 # ------------------------------------------------------------------ render
 FONTS = ('<link rel="preload" href="fonts/sora-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>\n'
          '<link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>\n')
@@ -587,7 +591,7 @@ if not PREVIEW:
                                        render_page=render_page, root_links=root_links))
     import html as _h2
     urls = ''
-    for n in ['index.html', 'services.html', 'why-us.html', 'how-it-works.html', 'contact.html']:
+    for n in ['index.html', 'services.html', 'why-us.html', 'how-it-works.html', 'contact.html', 'privacy.html']:
         path = pages[n]['path']
         im = ''.join('    <image:image><image:loc>%s%s</image:loc><image:caption>%s, Lexonia Pro Clean</image:caption></image:image>\n' % (SITE, i, _h2.escape(c)) for i, c in imgs.get(path, []))
         urls += '  <url>\n    <loc>%s%s</loc>\n    <lastmod>%s</lastmod>\n%s  </url>\n' % (SITE, path, today, im)
@@ -780,7 +784,7 @@ FONT_CSS = ("@font-face{font-family:'Sora';font-style:normal;font-weight:100 800
 os.makedirs(os.path.join(out, 'fonts'), exist_ok=True)
 for _f in ('sora-latin-wght-normal.woff2', 'inter-latin-wght-normal.woff2'):
     shutil.copyfile(os.path.join(here, 'fonts_src', _f), os.path.join(out, 'fonts', _f))
-open(os.path.join(out, 'styles.css'), 'w', encoding='utf-8').write(FONT_CSS + base + extra + DH.HOW_CSS + BL.BLOCKS_CSS + BLOG.BLOG_CSS + SOCIAL_CSS)
+open(os.path.join(out, 'styles.css'), 'w', encoding='utf-8').write(FONT_CSS + base + extra + DH.HOW_CSS + BL.BLOCKS_CSS + BLOG.BLOG_CSS + SOCIAL_CSS + PV.CSS)
 js = '''// Mobile menu
 (function(){
   var b=document.getElementById('menuBtn'), n=document.getElementById('navLinks');
