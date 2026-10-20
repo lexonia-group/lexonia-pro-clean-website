@@ -26,8 +26,8 @@ LOGO = 'lexonia-pro-clean-commercial-cleaning-logo.png'
 LOGO_DARK = 'lexonia-pro-clean-commercial-cleaning-logo-dark.png'
 OG_IMG = 'img/lexonia-pro-clean-commercial-cleaning-og.jpg'
 SIZES = _json.load(open(os.path.join(here, 'seo_img_map.json')))['sizes']   # photo sizes, so every <img> has width/height (no layout shift)
-PHONE = '(952) 836-8405'
-TEL = 'tel:+19528368405'
+PHONE = '(952) 697-4226'
+TEL = 'tel:+19526974226'
 EMAIL = 'info@lexoniaproclean.com'
 from profiles import SAME_AS, TT_LINK, social_row, SOCIAL_CSS   # outside profiles: footer icons + sameAs, one list, in generator/profiles.py.
 # Cities named on the site and in the schema = the service areas the owner entered on the Google listing (Oct 17 2026). Edit here only.
@@ -432,7 +432,7 @@ META = {
     'how-it-works.html': dict(title='How Commercial Cleaning Works + FAQ | Lexonia Pro Clean', path='how-it-works.html',
         desc='A free walkthrough, then a written scope and an exact price within 24 hours. Answers on supplies, scheduling, insurance and multi-story buildings.'),
     'contact.html': dict(title='Free Quote for Commercial Cleaning | Lexonia Pro Clean', path='contact.html',
-        desc='Request a free quote for office or small retail cleaning in the Twin Cities. Same-day response. Call (952) 836-8405 or email us.'),
+        desc='Request a free quote for office or small retail cleaning in the Twin Cities. Same-day response. Call (952) 697-4226 or email us.'),
 }
 for _n, _m in META.items():
     pages[_n].update(_m)
@@ -457,7 +457,7 @@ def business_ld(full=True):
         'knowsAbout': ['Commercial cleaning', 'Janitorial services', 'Office cleaning', 'Retail store cleaning'],
         'openingHoursSpecification': [{'@type': 'OpeningHoursSpecification', 'dayOfWeek': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], 'opens': '16:00', 'closes': '03:00'}],
         'logo': {'@type': 'ImageObject', 'url': SITE + LOGO}, 'image': [SITE + OG_IMG],
-        'telephone': '+1-952-836-8405', 'email': EMAIL, 'sameAs': SAME_AS,
+        'telephone': '+1-952-697-4226', 'email': EMAIL, 'sameAs': SAME_AS,
         'address': {'@type': 'PostalAddress', 'addressLocality': 'Eden Prairie', 'addressRegion': 'MN', 'addressCountry': 'US'},
         'areaServed': AREA_LD,
         'geo': {'@type': 'GeoCoordinates', 'latitude': 44.8547, 'longitude': -93.4708},   # Eden Prairie city centre, not a street address
@@ -920,6 +920,8 @@ clarity_js = ('' if PREVIEW else
     "(window, document, \"clarity\", \"script\", \"%s\");})();\n" % (_json.dumps(OWNER_CLARITY_IDS), CLARITY_ID))
 if not PREVIEW: js = js.replace("new Audio('audio/summerhill.mp3')", "new Audio('/audio/summerhill.mp3')")   # blog pages sit below the root
 open(os.path.join(out, 'site.js'), 'w', encoding='utf-8').write(clarity_js + js)
+import re as _re_ph
+PHONE_LD = '+1-' + PHONE[1:4] + '-' + PHONE[6:]   # schema.org form of PHONE, e.g. +1-952-697-4226
 # Guard: Thumbtack appears ONLY as the footer Contact icon (owner decision, Oct 14 2026); nowhere else
 for _root, _d, _fs in os.walk(out):
     for _f in _fs:
@@ -930,4 +932,8 @@ for _root, _d, _fs in os.walk(out):
             if _f.lower().endswith('.html') and _f not in ('404.html',) and 'footer' in _t:
                 assert _t.count('Find us on Thumbtack') == 1, 'footer Thumbtack link missing or duplicated in ' + _f
             assert 'service-area' not in _t.lower(), 'Service Area reference found in ' + _f
+            # Guard: PHONE is the business phone (changed Oct 20 2026). Any other number anywhere on the site fails the build,
+            # so a copy that was not updated (meta description, schema telephone, a page text) cannot go live.
+            for _p in set(_re_ph.findall(r'\(\d{3}\) \d{3}-\d{4}', _t)) | set(_re_ph.findall(r'\+1-?\d{3}-?\d{3}-?\d{4}', _t)):
+                assert _p in (PHONE, TEL[4:], PHONE_LD), 'phone number other than PHONE found in ' + _f + ': ' + _p
 print('built', MODE, sorted(os.listdir(out)))
