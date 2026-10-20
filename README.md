@@ -31,6 +31,9 @@ netlify.toml security headers, cache rules, publish directory (sits above site/,
 - Mobile first. Each page answers the "so what"; every chart has a legend.
 - Search wording (Oct 18 2026): lead with "commercial cleaning" and "janitorial services"; name Minneapolis, St. Paul and the suburbs. The named cities are CITIES in generator/build_site.py, the same list as the Google listing's service areas; edit them there only. Hours 4 PM to 3 AM daily, as on the Google listing.
 - IndexNow: the key file is built at /<INDEXNOW_KEY>.txt; after a deploy, the changed URLs are sent to api.indexnow.org (Bing and others).
+- Service pages (owner go Oct 20 2026): one page per service sold, in generator/service_pages.py, reached through the tabs inside the Services tab (the top menu stays at 5 tabs). Checklist, prices, cities and shared answers come from build_site.py, never retyped. No city pages: a city gets its own page only when Search Console shows impressions for that city and no page of ours ranks, one at a time.
+- Change ledger (findability engine, Oct 20 2026): seo/changes.csv records every change to a page's title, description or main text. The build fails when a page changed without a row, or when an engine or owner change comes less than 28 days after that page's previous change (exempt: baseline, new page, factual correction; blog articles are not tracked). After an intended edit: build, then `python3 generator/ledger.py record site "<type>" "<reason>"`, then build again.
+- Article backlog: seo/TOPICS.md (buyer-decision topics).
 
 ## Not in this repository
 

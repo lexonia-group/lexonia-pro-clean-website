@@ -3,7 +3,7 @@ import os, re, json, sys
 from html.parser import HTMLParser
 from urllib.parse import urlparse, urldefrag
 D='site'
-pages=sorted(os.path.relpath(os.path.join(r,f),D).replace('\\','/') for r,_,fs in os.walk(D) for f in fs if f.endswith('.html'))
+pages=sorted(os.path.relpath(os.path.join(r,f),D).replace('\\','/') for r,_,fs in os.walk(D) for f in fs if f.endswith('.html') and not f.startswith('google'))   # Search Console verification file: exact content required by Google, not a page
 SITE='https://lexoniaproclean.com/'
 # Outside links the owner approved: the profiles in generator/profiles.py (footer icons), Unsplash photo credits on blog articles
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'generator'))
@@ -11,7 +11,7 @@ from profiles import LINKED as _PROFILE_URLS
 ALLOWED_EXT=tuple(_PROFILE_URLS)+('https://unsplash.com/',)
 # Prices the owner made public as text (Oct 17 2026): from $155 per visit; interior windows $40 / $70 / $110. Any other dollar amount is flagged.
 ALLOWED_PRICES={'$155','$40','$70','$110'}
-UTILITY=('404.html','thanks.html')
+UTILITY=('404.html','thanks.html','unavailable.html','google49b64558210859aa.html')   # utility files: not-found, form thanks, region block page, Search Console verification file
 def as_file(path):
     return path+'index.html' if path.endswith('/') or path=='' else path
 class P(HTMLParser):
@@ -108,7 +108,7 @@ for f,(p,s) in R.items():
     m=[x.replace(' ','') for x in m if x.replace(' ','') not in ALLOWED_PRICES]
     if m: bad(f,'dollar amount not on the approved list: %s'%m[:5])
 # titles / descriptions unique
-ts={f:R[f][0].title.strip() for f in R}; ds={f:R[f][0].meta.get('description') for f in R}
+ts={f:R[f][0].title.strip() for f in R if f not in UTILITY}; ds={f:R[f][0].meta.get('description') for f in R if f not in UTILITY}
 if len(set(ts.values()))!=len(ts): bad('*','duplicate titles')
 if len(set(ds.values()))!=len(ds): bad('*','duplicate descriptions')
 # sitemap & robots & llms

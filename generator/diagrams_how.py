@@ -27,7 +27,7 @@ SWIM = [
     ('you',  'chat',  'Ask for a quote', 'Use the quote form, call, or email us. Share your square footage and schedule.'),
     ('us',   'reply', 'We reply the same day', 'Every message gets a same-day response.'),
     ('both', 'walk',  'Free walkthrough', 'About 45 to 60 minutes at your space. We go over what needs to be cleaned and how often.'),
-    ('us',   'doc',   'Written scope and price', 'Within 24 hours. Supplies and equipment included, no surprise fees.'),
+    ('us',   'doc',   'Written scope and price', 'Within 24 hours. Cleaning liquids and equipment included, no surprise fees.'),
     ('you',  'yes',   'You say yes', 'You confirm the scope and the schedule.'),
     ('us',   'moon',  'Cleaning starts', 'Evenings and nights, on your written checklist. The first visit is a reset clean.'),
 ]

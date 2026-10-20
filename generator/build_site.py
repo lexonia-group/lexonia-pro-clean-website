@@ -10,6 +10,8 @@ import blocks as BL
 import price_cards as PC
 import blog as BLOG
 import privacy as PV   # privacy notice page; describes what the site actually collects
+import service_pages as SP   # one page per service sold (owner go Oct 20 2026); text from the facts below
+import ledger as LEDGER   # change ledger: every page change recorded in seo/changes.csv, 28 days apart (build fails otherwise)
 
 out, MODE = sys.argv[1], sys.argv[2]
 PREVIEW = MODE == 'preview'
@@ -20,7 +22,7 @@ _sh.copytree(os.path.join(here, 'assets_src'), out, dirs_exist_ok=True)   # phot
 
 import json as _json
 SITE = 'https://lexoniaproclean.com/'
-BUILD_DATE = '2026-10-18'   # update when the content changes: used for sitemap lastmod and dateModified
+BUILD_DATE = '2026-10-20'   # update when the content changes: used for sitemap lastmod and dateModified
 CLARITY_ID = 'yybv330g41'   # Microsoft Clarity project (visitor analytics). The official snippet is written to the top of site.js (self-hosted, no inline script, CSP stays strict); its queue stub is required, the tag alone does not start
 LOGO = 'lexonia-pro-clean-commercial-cleaning-logo.png'
 LOGO_DARK = 'lexonia-pro-clean-commercial-cleaning-logo-dark.png'
@@ -31,8 +33,8 @@ TEL = 'tel:+19526974226'
 EMAIL = 'info@lexoniaproclean.com'
 from profiles import SAME_AS, TT_LINK, social_row, SOCIAL_CSS   # outside profiles: footer icons + sameAs, one list, in generator/profiles.py.
 # Cities named on the site and in the schema = the service areas the owner entered on the Google listing (Oct 17 2026). Edit here only.
-CITIES = ['Minneapolis', 'St. Paul', 'Eden Prairie', 'Edina', 'Bloomington', 'Minnetonka', 'Plymouth', 'Maple Grove', 'Golden Valley',
-          'St. Louis Park', 'Richfield', 'Wayzata', 'Excelsior', 'Chanhassen', 'Burnsville', 'Eagan', 'Mendota Heights']
+CITIES = ['Minneapolis', 'St. Paul', 'Eden Prairie', 'Edina', 'Bloomington', 'Minnetonka', 'Hopkins', 'Plymouth', 'Maple Grove', 'Golden Valley',
+          'St. Louis Park', 'Richfield', 'Wayzata', 'Excelsior', 'Chanhassen', 'Chaska', 'Burnsville', 'Eagan', 'Mendota Heights']   # Hopkins and Chaska added Oct 20 2026 to match the listing
 SUBURBS = ', '.join(CITIES[3:-1]) + ' and ' + CITIES[-1]   # the named suburbs after Minneapolis, St. Paul and Eden Prairie
 HOURS_TEXT = '4 PM to 3 AM, seven days a week'   # cleaning hours, same as the Google listing
 INDEXNOW_KEY = '626ea4651324daaccc90eb9ef9a7094b'   # IndexNow (Bing, Yandex, others): key file served at /<key>.txt; changed URLs are pinged after each deploy. Public by design
@@ -75,7 +77,7 @@ def loop_block():
 
 FACTS = ''.join('      <div class="fact"><strong>%s</strong><span>%s</span></div>\n' % (v, l) for l, v in
                 [('Response to quote requests', 'Same day'), ('Scheduling', 'Evenings &amp; nights'),
-                 ('Supplies &amp; equipment', 'Included'), ('Walkthrough', 'Free')])
+                 ('Cleaning liquids &amp; equipment', 'Included'), ('Walkthrough', 'Free')])
 
 # ------------------------------------------------------------------ icons
 def svg(inner, w=24, sw=2):
@@ -181,8 +183,9 @@ def pills():
             '      <span class="pill reveal">%s Small Retail Stores &amp; Boutiques</span>\n    </div>\n'
             % (svg(I_OFFICE, 17), svg(I_BAG, 17)))
 
-def card(icon, title, text):
-    return ('      <div class="card reveal">\n        <div class="icon">%s</div>\n        <h3>%s</h3>\n        <p>%s</p>\n      </div>\n' % (svg(icon, 26), title, text))
+def card(icon, title, text, href=None, link=''):
+    more = ('<a class="more-link" href="%s">%s</a>' % (href, link)) if href else ''
+    return ('      <div class="card reveal">\n        <div class="icon">%s</div>\n        <h3>%s</h3>\n        <p>%s</p>%s\n      </div>\n' % (svg(icon, 26), title, text, more))
 
 def why(icon, title, text, href=None, link=''):
     more = ('<a class="more-link" href="%s">%s</a>' % (href, link)) if href else ''
@@ -211,7 +214,7 @@ def pricing_section():
              'For your exact price, request a free quote or call %s.' % PHONE)
     w_alt = 'Price card: interior windows add-on, priced by the number of windows (1 to 5, 6 to 10, or 11 to 15). For the price, request a free quote or call %s.' % PHONE
     return ('<section id="pricing" class="pricing">\n  <div class="container center">\n    <span class="kicker">Pricing</span>\n    <h2 class="section-title">Pricing by Size of Space</h2>\n'
-        '    <p class="section-lead" style="margin:0 auto">Recurring cleaning, weekly or every other week, for spaces up to 10,000 sq ft. Supplies and equipment are included. Your exact price is confirmed in writing after a free walkthrough.</p>\n'
+        '    <p class="section-lead" style="margin:0 auto">Recurring cleaning, weekly or every other week, for spaces up to 10,000 sq ft. Cleaning liquids and equipment are included. Your exact price is confirmed in writing after a free walkthrough.</p>\n'
         '    <div class="pshow">\n'
         '      <figure class="pimg reveal">' + _price_img('by-size', t_alt) + '</figure>\n'
         '      <div class="pside">\n'
@@ -223,9 +226,11 @@ def pricing_section():
 
 SERVICE_CARDS = (
     card(I_OFFICE, 'Office Cleaning',
-         'Recurring cleaning for offices — workspaces, common areas, conference rooms, break rooms, and restrooms, with high-touch points disinfected every visit.')
+         'Recurring cleaning for offices — workspaces, common areas, conference rooms, break rooms, and restrooms, with high-touch points disinfected every visit.',
+         'office-cleaning.html', 'More on office cleaning')
     + card(I_BAG, 'Small Retail &amp; Boutique Cleaning',
-           'Recurring cleaning for small retail stores — sales floor, front counter, fitting rooms, mirrors, restrooms, and back rooms, scheduled around your hours.'))
+           'Recurring cleaning for small retail stores — sales floor, front counter, fitting rooms, mirrors, restrooms, and back rooms, scheduled around your hours.',
+           'retail-cleaning.html', 'More on retail cleaning'))
 
 WHY_ITEMS = (
     why(I_LIST, 'Checklist-Driven Visits', 'Every visit follows a written checklist, and a completed copy is left on site so you can see exactly what was done.', 'services.html#checklist', 'See the checklist')
@@ -245,7 +250,7 @@ FAQ = [
     ('When do you clean?', 'Evenings and nights, when your business is closed, so we are never in your way.'),
     ('Do you bring your own supplies and equipment?', 'Yes. We bring the cleaning liquids and our own equipment. All of it is included in the price, with no surprise fees and no travel charges.'),
     ('Who supplies trash bags, soap and paper towels?', 'Your company or building management supplies the consumables: trash bags, soap, paper towels, tissue and restroom disposal bags. We do not supply or buy them. We restock them from your supply every visit and tell you when something is running low.'),
-    ('How does pricing work?', 'We start with a free walkthrough of your space, about 45 to 60 minutes. Within 24 hours you get a written scope and an exact price. For spaces up to 10,000 sq ft, weekly or every other week, the price is per visit by size of space (see the price card on the Services page), before sales tax. Daily cleaning, or a space over 10,000 sq ft, is a flat monthly contract quoted after the walkthrough, so you know your exact cost before we start. Multi-story buildings get custom pricing, at greater discounts.'),
+    ('How does pricing work?', 'We start with a free walkthrough of your space, about 45 to 60 minutes. Within 24 hours you get a written scope and an exact price. For spaces up to 10,000 sq ft, weekly or every other week, the price is per visit by size of space, before sales tax: from $%d per visit for 1,000 to 2,000 sq ft, weekly (the full price card is on the Services page).' % PRICE_FROM + ' Daily cleaning, or a space over 10,000 sq ft, is a flat monthly contract quoted after the walkthrough, so you know your exact cost before we start. Multi-story buildings get custom pricing, at greater discounts.'),
     ('How fast do you respond to a quote request?', 'Every message gets a same-day response.'),
     ('What happens after the first visit?', 'The first visit is a reset clean that brings everything up to standard. Recurring visits then maintain it from there. We check in after two weeks and adjust the scope until it fits.'),
     ('How will I know what was cleaned?', 'Every visit follows a written checklist, and a completed copy is left on site so you can see exactly what was done.'),
@@ -329,19 +334,22 @@ pages['index.html'] = dict(title='Lexonia Pro Clean | Commercial Cleaning for Of
     active='', body=home)
 
 # ---- SERVICES
-included = (
-    box('Restrooms', ['Toilets and urinals disinfected', 'Sinks, counters and fixtures', 'Mirrors', 'Partitions, stall doors and handles', 'Floors swept and mopped with disinfectant', 'Trash emptied and bins re-lined', 'Soap, towels, tissue and liners restocked from your supply'])
-    + box('Break room / kitchenette', ['Counters and backsplash wiped down', 'Sink scrubbed and rinsed', 'Appliance exteriors — fridge, microwave, dishwasher', 'Tables and chairs', 'Cabinet fronts spot-cleaned', 'Trash emptied and bins re-lined', 'Floor vacuumed and mopped'])
-    + box('Offices and workspaces', ['Desks and accessible surfaces dusted', 'Shelves, sills and ledges', 'Trash emptied at every station and re-lined', 'Carpets vacuumed', 'Hard floors mopped'])
-    + box('Common areas', ['Reception, lobby and waiting areas', 'Conference rooms — tables wiped, chairs squared', 'Interior glass on doors and partitions', 'Corridors vacuumed and mopped', 'Stair and elevator landings within the suite', 'Entry mats vacuumed or shaken out'])
-    + box('High-touch points, disinfected', ['Door handles and push plates', 'Light switches', 'Elevator and keypad buttons', 'Handrails', 'Shared appliance handles and controls', 'Reception counter edge'])
-    + box('Small retail stores', ['Sales floor swept and mopped', 'Rugs vacuumed', 'Mirrors cleaned', 'Display pieces wiped down', 'Front counter wiped, counter edge disinfected', 'Fitting rooms wiped down', 'Restroom, break room, back rooms and trash'])
-)
+CHECKLIST = [
+    ('Restrooms', ['Toilets and urinals disinfected', 'Sinks, counters and fixtures', 'Mirrors', 'Partitions, stall doors and handles', 'Floors swept and mopped with disinfectant', 'Trash emptied and bins re-lined', 'Soap, towels, tissue and liners restocked from your supply']),
+    ('Break room / kitchenette', ['Counters and backsplash wiped down', 'Sink scrubbed and rinsed', 'Appliance exteriors — fridge, microwave, dishwasher', 'Tables and chairs', 'Cabinet fronts spot-cleaned', 'Trash emptied and bins re-lined', 'Floor vacuumed and mopped']),
+    ('Offices and workspaces', ['Desks and accessible surfaces dusted', 'Shelves, sills and ledges', 'Trash emptied at every station and re-lined', 'Carpets vacuumed', 'Hard floors mopped']),
+    ('Common areas', ['Reception, lobby and waiting areas', 'Conference rooms — tables wiped, chairs squared', 'Interior glass on doors and partitions', 'Corridors vacuumed and mopped', 'Stair and elevator landings within the suite', 'Entry mats vacuumed or shaken out']),
+    ('High-touch points, disinfected', ['Door handles and push plates', 'Light switches', 'Elevator and keypad buttons', 'Handrails', 'Shared appliance handles and controls', 'Reception counter edge']),
+    ('Small retail stores', ['Sales floor swept and mopped', 'Rugs vacuumed', 'Mirrors cleaned', 'Display pieces wiped down', 'Front counter wiped, counter edge disinfected', 'Fitting rooms wiped down', 'Restroom, break room, back rooms and trash']),
+]   # the written checklist: services page and service pages read it from here
+included = ''.join(box(t, items) for t, items in CHECKLIST)
 not_incl = ['Windows (interior windows can be added)', 'Operating or maintaining your machines', 'Consumables such as trash bags, soap, paper towels and tissue — your company or building management supplies them',
             'Moving furniture, equipment or paperwork', 'Biohazard, hoarding or post-construction cleanup']
 services = ('<main id="top">\n' + page_hero('Services', 'Commercial Cleaning for Offices and Small Retail Stores',
     'Recurring cleaning on a written checklist. We bring the cleaning liquids and our equipment, all included in the price.')
-    + '<section class="services">\n  <div class="container center">\n    <h2 class="sr-only">What we clean</h2>\n    <div class="cards">\n' + SERVICE_CARDS + '    </div>\n  </div>\n</section>\n\n'
+    + SP.subtabs('services.html')
+    + '<section class="services">\n  <div class="container center">\n    <h2 class="sr-only">What we clean</h2>\n    <div class="cards">\n' + SERVICE_CARDS + '    </div>\n'
+    + '  </div>\n</section>\n\n'
     + pricing_section() +
     '<section id="checklist">\n  <div class="container center">\n    <span class="kicker">The Checklist</span>\n    <h2 class="section-title">What We Do Every Visit</h2>\n'
     '    <p class="section-lead">Office visits follow this written scope, and a completed copy is left on site. Retail checklists are built around your store.</p>\n'
@@ -369,7 +377,7 @@ pages['services.html'] = dict(title='Services | Lexonia Pro Clean',
 
 # ---- WHY US
 WHY_FLOW = [('walk', 'Free walkthrough', 'About 45 to 60 minutes, so we can see the space and talk through what needs to be cleaned.'),
-            ('doc', 'Written scope and price', 'Within 24 hours: an exact price, with supplies and equipment included.'),
+            ('doc', 'Written scope and price', 'Within 24 hours: an exact price, with cleaning liquids and equipment included.'),
             ('moon', 'First visit: a reset clean', 'Evenings and nights, on your written checklist. A completed copy is left on site.'),
             ('chat', 'Two-week check-in', 'We check in and adjust the scope until it fits.'),
             ('list', 'Maintenance visits', 'After that, each visit maintains it, on your schedule.')]
@@ -425,7 +433,7 @@ FONTS = ('<link rel="preload" href="fonts/sora-latin-wght-normal.woff2" as="font
 META = {
     'index.html': dict(title='Commercial Cleaning & Janitorial Services | Twin Cities MN', path='',
         desc='Commercial cleaning and janitorial services for offices and small retail stores in Minneapolis, St. Paul and the suburbs. Insured crews. Free walkthrough.'),
-    'services.html': dict(title='Office & Retail Cleaning Services | Lexonia Pro Clean', path='services.html',
+    'services.html': dict(title='Commercial Cleaning Services | Eden Prairie & Twin Cities MN', path='services.html',
         desc='Recurring office and small retail cleaning in the Twin Cities, priced per visit by size of space, on a written checklist. Liquids and equipment included.'),
     'why-us.html': dict(title='Why Choose Lexonia Pro Clean | Commercial Cleaning MN', path='why-us.html',
         desc='A written checklist every visit, a free walkthrough, an exact written price, evenings and nights, and insured, background-checked crews in the Twin Cities.'),
@@ -464,6 +472,13 @@ def business_ld(full=True):
         'hasOfferCatalog': {'@type': 'OfferCatalog', 'name': 'Commercial cleaning services',
             'itemListElement': [{'@type': 'Offer', 'itemOffered': {'@type': 'Service', 'name': n, 'description': d}} for n, d in SERVICES_LD]}})
     return b
+pages.update(SP.build(dict(page_hero=page_hero, cta_band=cta_band, box=box, flow=BL.flow, glance=BL.glance, floors=DH.floors_diagram,
+    CHECKLIST=CHECKLIST, NOT_INCL=not_incl, FAQ=FAQ, HOME_FLOW=HOME_FLOW, PRICE_FROM=PRICE_FROM, WIN_ROWS=WIN_ROWS, CITIES=CITIES,
+    HOURS_TEXT=HOURS_TEXT, SITE=SITE, BIZ_ID=BIZ_ID, AREA_LD=AREA_LD)))
+for _n in SP.NAMES:
+    assert len(pages[_n]['title']) <= 62, (_n, len(pages[_n]['title']))
+    assert len(pages[_n]['desc']) <= 160, (_n, len(pages[_n]['desc']))
+
 def crumbs(name, label):
     items = [{'@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': SITE}]
     if name != 'index.html': items.append({'@type': 'ListItem', 'position': 2, 'name': label, 'item': SITE + name})
@@ -493,6 +508,7 @@ def page_ld(name, p):
             w, h = SIZES[img]
             graph.append({'@type': 'ImageObject', 'contentUrl': SITE + 'img/' + img, 'name': title + ' | Lexonia Pro Clean', 'caption': title + ', Lexonia Pro Clean commercial cleaning',
                           'width': w, 'height': h, 'creator': {'@id': BIZ_ID}, 'creditText': 'Lexonia Pro Clean', 'copyrightNotice': '© 2026 Lexonia Pro Clean LLC'})
+    graph.extend(p.get('ld_extra', []))
     if name == 'how-it-works.html':
         graph.append({'@type': 'FAQPage', '@id': url + '#faq', 'mainEntity': [{'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a}} for q, a in FAQ]})
     return '<script type="application/ld+json">\n' + _json.dumps({'@context': 'https://schema.org', '@graph': graph}, ensure_ascii=False, indent=1) + '\n</script>\n'
@@ -591,7 +607,7 @@ if not PREVIEW:
                                        render_page=render_page, root_links=root_links))
     import html as _h2
     urls = ''
-    for n in ['index.html', 'services.html', 'why-us.html', 'how-it-works.html', 'contact.html', 'privacy.html']:
+    for n in ['index.html', 'services.html'] + SP.NAMES + ['why-us.html', 'how-it-works.html', 'contact.html', 'privacy.html']:
         path = pages[n]['path']
         im = ''.join('    <image:image><image:loc>%s%s</image:loc><image:caption>%s, Lexonia Pro Clean</image:caption></image:image>\n' % (SITE, i, _h2.escape(c)) for i, c in imgs.get(path, []))
         urls += '  <url>\n    <loc>%s%s</loc>\n    <lastmod>%s</lastmod>\n%s  </url>\n' % (SITE, path, today, im)
@@ -610,7 +626,7 @@ if not PREVIEW:
         '- Cleaning hours: ' + HOURS_TEXT + '.\n'
         '- What we do: recurring commercial cleaning on a written checklist, with a completed copy left on site after every visit. Restrooms, break rooms, workspaces, common areas, conference rooms, sales floors, mirrors and fitting rooms.\n'
         '- When: evenings and nights, when the business is closed.\n'
-        '- Pricing: a free walkthrough, then a written scope and an exact price within 24 hours. No surprise fees and no travel charges. Recurring cleaning up to 10,000 sq ft is priced per visit by size of space, weekly or every other week, before sales tax; the current price card is on the Services page. Interior windows are an add-on, priced by the number of windows. Daily cleaning, or a space over 10,000 sq ft: a flat monthly contract quoted after the walkthrough. Multi-story buildings: custom pricing, at greater discounts. For an exact price, request a free quote.\n'
+        '- Pricing: a free walkthrough, then a written scope and an exact price within 24 hours. No surprise fees and no travel charges. Recurring cleaning up to 10,000 sq ft is priced per visit by size of space, weekly or every other week, before sales tax: from $' + str(PRICE_FROM) + ' per visit for 1,000 to 2,000 sq ft, weekly; the full price card is on the Services page. Interior windows are an add-on, priced by the number of windows: ' + ', '.join('$%d for %s' % (p, n.replace('–', ' to ')) for n, p in WIN_ROWS) + ', before sales tax. Daily cleaning, or a space over 10,000 sq ft: a flat monthly contract quoted after the walkthrough. Multi-story buildings: custom pricing, at greater discounts. For an exact price, request a free quote.\n'
         '- Process: a free walkthrough of about 45 to 60 minutes, a written scope and exact price within 24 hours, then recurring cleaning. The first visit is a reset clean, recurring visits maintain it, and we check in after two weeks and adjust the scope until it fits.\n'
         '- Supplies: we bring the cleaning liquids and our own equipment, all included in the price.\n'
         '- Consumables: the client\'s company or building management supplies trash bags, soap, paper towels, tissue and restroom disposal bags. We do not supply or buy them. We restock them from the client\'s supply and say when something is running low.\n'
@@ -622,6 +638,7 @@ if not PREVIEW:
         '- Phone: %s\n- Email: %s\n- Website: %s\n\n'
         '## Pages\n\n'
         '- [Services](%sservices.html): what is cleaned every visit, multi-story buildings, photos.\n'
+        + ''.join('- [%s](' % t + SITE + h + ')\n' for h, t in SP.LINKS) +
         '- [Why Us](%swhy-us.html): how Lexonia Pro Clean works, customer reviews.\n'
         '- [How It Works](%show-it-works.html): the process from first call to first clean, and frequently asked questions.\n'
         '- [Contact](%scontact.html): free quote request.\n'
@@ -759,6 +776,7 @@ extra = '''
   .mbar-quote{background:linear-gradient(135deg,var(--teal),var(--cyan))}
   body{padding-bottom:76px}
   .music-btn{bottom:84px !important}
+  footer.site{padding-bottom:88px}   /* the Music button sits above the call bar; keep the copyright line clear of it */
   .btn{min-height:46px}
   .field input,.field select,.field textarea{font-size:16px}
   .nav .btn{min-height:40px}
@@ -784,7 +802,7 @@ FONT_CSS = ("@font-face{font-family:'Sora';font-style:normal;font-weight:100 800
 os.makedirs(os.path.join(out, 'fonts'), exist_ok=True)
 for _f in ('sora-latin-wght-normal.woff2', 'inter-latin-wght-normal.woff2'):
     shutil.copyfile(os.path.join(here, 'fonts_src', _f), os.path.join(out, 'fonts', _f))
-open(os.path.join(out, 'styles.css'), 'w', encoding='utf-8').write(FONT_CSS + base + extra + DH.HOW_CSS + BL.BLOCKS_CSS + BLOG.BLOG_CSS + SOCIAL_CSS + PV.CSS)
+open(os.path.join(out, 'styles.css'), 'w', encoding='utf-8').write(FONT_CSS + base + extra + DH.HOW_CSS + BL.BLOCKS_CSS + BLOG.BLOG_CSS + SOCIAL_CSS + PV.CSS + SP.CSS)
 js = '''// Mobile menu
 (function(){
   var b=document.getElementById('menuBtn'), n=document.getElementById('navLinks');
@@ -936,4 +954,9 @@ for _root, _d, _fs in os.walk(out):
             # so a copy that was not updated (meta description, schema telephone, a page text) cannot go live.
             for _p in set(_re_ph.findall(r'\(\d{3}\) \d{3}-\d{4}', _t)) | set(_re_ph.findall(r'\+1-?\d{3}-?\d{3}-?\d{4}', _t)):
                 assert _p in (PHONE, TEL[4:], PHONE_LD), 'phone number other than PHONE found in ' + _f + ': ' + _p
+if not PREVIEW:
+    # Guard: Google Search Console verification file must be served (removing it un-verifies the URL-prefix property)
+    assert os.path.exists(os.path.join(out, 'google49b64558210859aa.html')), 'Search Console verification file missing from the build'
+    # Guard: change ledger (seo/changes.csv). Every change to a page's title, description or main text is recorded, 28 days apart
+    LEDGER.check(out, os.path.join(here, '..', 'seo', 'changes.csv'))
 print('built', MODE, sorted(os.listdir(out)))
