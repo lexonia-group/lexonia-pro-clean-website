@@ -10,7 +10,7 @@ the Facebook Page is linked and listed as an official profile (Oct 17 2026); ico
 TT_URL = 'https://www.thumbtack.com/mn/eden-prairie/commercial-cleaning/lexonia-pro-clean/service/586412868292583430'
 FB_URL = 'https://www.facebook.com/profile.php?id=61595444793911'
 IG_URL = None    # Instagram: set when the account is ready
-GBP_URL = None   # Google Business Profile: set after Google verifies the listing
+GBP_URL = 'https://www.google.com/maps?cid=7406041639399653483'   # Google Business Profile, verified Oct 2026 (Maps link by the listing's permanent ID)
 
 _P_TT = 'M6.18 6.38h11.69v2.68H6.17zm7.27 3.8v3.14c0 3.23-.02 3.74-.14 4.36a7.95 7.95 0 0 1-1.3 2.87c-.03 0-.78-1.35-.9-1.62-.17-.4-.3-.8-.4-1.25l-.09-.41-.02-5.78.16-.2a3.3 3.3 0 0 1 2.44-1.1zM12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0Z'
 _P_FB = 'M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z'
