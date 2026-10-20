@@ -283,7 +283,7 @@ FORM = ('      <form class="quote-form" name="quote-request" method="POST" actio
         '            <select id="f-service" name="service" required>\n              <option value="" disabled selected>Select a service</option>\n'
         '              <option>Office Cleaning</option>\n              <option>Small Retail Store / Boutique</option>\n              <option>Other / Not Sure</option>\n            </select>\n          </div>\n'
         '          <div class="field">\n            <label for="f-frequency">Frequency</label>\n            <select id="f-frequency" name="frequency">\n'
-        '              <option value="" disabled selected>How often?</option>\n              <option>Weekly</option>\n              <option>2–3x per week</option>\n'
+        '              <option value="" disabled selected>How often?</option>\n              <option>Weekly</option>\n              <option>Every other week</option>\n              <option>2–3x per week</option>\n'
         '              <option>Nightly (5x+ per week)</option>\n              <option>Not sure yet</option>\n            </select>\n          </div>\n        </div>\n'
         '        <div class="field"><label for="f-size">Approx. Square Footage</label><input id="f-size" name="square_footage" type="text" maxlength="40" inputmode="text" placeholder="e.g., 5,000 sq ft"></div>\n'
         '        <div class="field"><label for="f-message">Anything else we should know?</label><textarea id="f-message" name="message" maxlength="2000" rows="4" placeholder="Current setup, pain points, timing…"></textarea></div>\n'
@@ -333,7 +333,7 @@ pages['index.html'] = dict(title='Lexonia Pro Clean | Commercial Cleaning for Of
     desc='Commercial cleaning for offices and small retail stores across the Twin Cities metro. Insured, background-checked crews. Free walkthrough, then a written scope and exact price within 24 hours.',
     active='', body=home)
 
-# ---- SERVICES
+# ---- SERVICES page
 CHECKLIST = [
     ('Restrooms', ['Toilets and urinals disinfected', 'Sinks, counters and fixtures', 'Mirrors', 'Partitions, stall doors and handles', 'Floors swept and mopped with disinfectant', 'Trash emptied and bins re-lined', 'Soap, towels, tissue and liners restocked from your supply']),
     ('Break room / kitchenette', ['Counters and backsplash wiped down', 'Sink scrubbed and rinsed', 'Appliance exteriors — fridge, microwave, dishwasher', 'Tables and chairs', 'Cabinet fronts spot-cleaned', 'Trash emptied and bins re-lined', 'Floor vacuumed and mopped']),
@@ -954,6 +954,16 @@ for _root, _d, _fs in os.walk(out):
             # so a copy that was not updated (meta description, schema telephone, a page text) cannot go live.
             for _p in set(_re_ph.findall(r'\(\d{3}\) \d{3}-\d{4}', _t)) | set(_re_ph.findall(r'\+1-?\d{3}-?\d{3}-?\d{4}', _t)):
                 assert _p in (PHONE, TEL[4:], PHONE_LD), 'phone number other than PHONE found in ' + _f + ': ' + _p
+if not PREVIEW:
+    # prices.json: the price card as data, read by the Make quote-form auto-reply (owner go Oct 20 2026). Built from PRICE_ROWS,
+    # the same list the price-card images are drawn from, so the email and the card cannot disagree. Index = ceil(sq ft / 1000), 1..10;
+    # each band includes its top edge (2,000 sq ft = the 1,000-2,000 price). Under 1,000 or over 10,000 sq ft: no table price.
+    _bands = [PRICE_ROWS[0]] + PRICE_ROWS
+    _prices = {'updated': BUILD_DATE, 'per': 'visit, plus sales tax', 'min_sqft': 1000, 'max_sqft': 10000, 'from': PRICE_FROM,
+               'band': [b[0].replace(' ', '') for b in _bands], 'weekly': [b[1] for b in _bands], 'every_other_week': [b[2] for b in _bands],
+               'windows': [{'windows': n, 'price': p} for n, p in WIN_ROWS]}
+    assert len(_prices['weekly']) == 10 and all(100 <= v < 2000 for v in _prices['weekly'] + _prices['every_other_week']), 'prices.json out of range'
+    open(os.path.join(out, 'prices.json'), 'w', encoding='utf-8').write(_json.dumps(_prices, ensure_ascii=False, indent=1))
 if not PREVIEW:
     # Guard: Google Search Console verification file must be served (removing it un-verifies the URL-prefix property)
     assert os.path.exists(os.path.join(out, 'google49b64558210859aa.html')), 'Search Console verification file missing from the build'

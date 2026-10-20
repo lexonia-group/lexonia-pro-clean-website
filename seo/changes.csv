@@ -9,3 +9,4 @@ date,page,type,fingerprint,reason
 2026-10-20,retail-cleaning.html,new page,2682186e080c,"service page (owner go Oct 20 2026): title matches the search, price in text, objection-led FAQ"
 2026-10-20,services.html,baseline,1473bf861131,"ledger start; same update: Hopkins and Chaska added, 'cleaning liquids and equipment', starting price in text, Services tabs and title"
 2026-10-20,why-us.html,baseline,0d3a4c4ad06d,"ledger start; same update: Hopkins and Chaska added, 'cleaning liquids and equipment', starting price in text, Services tabs and title"
+2026-10-20,contact.html,factual correction,9425e4fbad74,"quote form: 'Every other week' added to How often (the price card sells it; the form did not offer it); needed by the instant quote reply, owner go Oct 20 2026"
