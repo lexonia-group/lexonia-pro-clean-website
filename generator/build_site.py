@@ -507,7 +507,7 @@ def page_ld(name, p):
                            ('lexonia-pro-clean-cleaning-cart-and-vacuum.jpg', 'Cleaning cart with mop bucket and vacuum')]:
             w, h = SIZES[img]
             graph.append({'@type': 'ImageObject', 'contentUrl': SITE + 'img/' + img, 'name': title + ' | Lexonia Pro Clean', 'caption': title + ', Lexonia Pro Clean commercial cleaning',
-                          'width': w, 'height': h, 'creator': {'@id': BIZ_ID}, 'creditText': 'Lexonia Pro Clean', 'copyrightNotice': '© 2026 Lexonia Pro Clean LLC'})
+                          'width': w, 'height': h})
     graph.extend(p.get('ld_extra', []))
     if name == 'how-it-works.html':
         graph.append({'@type': 'FAQPage', '@id': url + '#faq', 'mainEntity': [{'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a}} for q, a in FAQ]})
