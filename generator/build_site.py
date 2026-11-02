@@ -61,7 +61,6 @@ for slug, what in [('break-room-island', 'break room island'), ('break-room-coun
     LOOP.append(('img/loop/lexonia-pro-clean-%s-before-cleaning.jpg' % slug, 'Before cleaning: %s, Lexonia Pro Clean commercial cleaning' % what, 'Before: %s' % what))
     LOOP.append(('img/loop/lexonia-pro-clean-%s-after-cleaning.jpg' % slug, 'After cleaning: %s, Lexonia Pro Clean commercial cleaning' % what, 'After: %s' % what))
 LOOP += [('img/loop/lexonia-pro-clean-cleaning-supplies-shelf.jpg', 'Shelf of cleaning supplies used by Lexonia Pro Clean', 'Cleaning supplies'),
-         ('img/loop/lexonia-pro-clean-janitorial-supply-caddy.jpg', 'Janitorial caddy stocked with supplies, Lexonia Pro Clean', 'Supply caddy'),
          ('img/loop/lexonia-pro-clean-cleaning-cart-mop-bucket-vacuum.jpg', 'Lexonia Pro Clean cleaning cart with mop bucket and vacuum', 'Cart, mop bucket and vacuum'),
          ('img/loop/lexonia-pro-clean-cleaning-cart-office-hallway.jpg', 'Lexonia Pro Clean cleaning cart in a clean office hallway', 'Cart in the hallway'),
          ('img/loop/lexonia-pro-clean-trash-station-fresh-liners.jpg', 'Office trash station with fresh liners, Lexonia Pro Clean', 'Trash station')]
@@ -367,8 +366,7 @@ services = ('<main id="top">\n' + page_hero('Services', 'Commercial Cleaning for
     + figure('lexonia-pro-clean-restroom-vanity-cleaning.jpg', 'Clean restroom vanity after a Lexonia Pro Clean commercial cleaning visit in the Twin Cities', 'Restroom vanity')
     + figure('lexonia-pro-clean-kitchenette-sink-cleaning.jpg', 'Clean kitchenette sink after a Lexonia Pro Clean commercial cleaning visit in the Twin Cities', 'Kitchenette sink')
     + figure('lexonia-pro-clean-trash-station-cleaning.jpg', 'Office trash station with fresh liners, Lexonia Pro Clean commercial cleaning', 'Trash station')
-    + '    </div>\n    <h3 class="gallery-sub">Our equipment</h3>\n    <div class="gallery three">\n'
-    + figure('lexonia-pro-clean-janitorial-caddy-supplies.jpg', 'Janitorial caddy stocked with cleaning supplies, Lexonia Pro Clean', 'Supply caddy')
+    + '    </div>\n    <h3 class="gallery-sub">Our equipment</h3>\n    <div class="gallery three g2">\n'
     + figure('lexonia-pro-clean-cleaning-cart-and-vacuum.jpg', 'Lexonia Pro Clean cleaning cart with mop bucket and vacuum', 'Cart, mop bucket and vacuum')
     + figure('lexonia-pro-clean-upright-vacuum.jpg', 'Upright vacuum used by Lexonia Pro Clean commercial cleaning crews', 'Vacuum')
     + '    </div>\n  </div>\n</section>\n\n' + cta_band() + '</main>\n')
@@ -503,7 +501,6 @@ def page_ld(name, p):
                            ('lexonia-pro-clean-break-room-counter-before-and-after.jpg', 'Break room counter, before and after cleaning'),
                            ('lexonia-pro-clean-sink-area-before-and-after.jpg', 'Sink area, before and after cleaning'),
                            ('lexonia-pro-clean-sink-detail-before-and-after.jpg', 'Sink detail, before and after cleaning'),
-                           ('lexonia-pro-clean-janitorial-caddy-supplies.jpg', 'Janitorial caddy stocked with cleaning supplies'),
                            ('lexonia-pro-clean-cleaning-cart-and-vacuum.jpg', 'Cleaning cart with mop bucket and vacuum')]:
             w, h = SIZES[img]
             graph.append({'@type': 'ImageObject', 'contentUrl': SITE + 'img/' + img, 'name': title + ' | Lexonia Pro Clean', 'caption': title + ', Lexonia Pro Clean commercial cleaning',
@@ -601,7 +598,6 @@ if not PREVIEW:
                               ('img/lexonia-pro-clean-break-room-counter-before-and-after.jpg', 'Break room counter, before and after cleaning'),
                               ('img/lexonia-pro-clean-sink-area-before-and-after.jpg', 'Sink area, before and after cleaning'),
                               ('img/lexonia-pro-clean-sink-detail-before-and-after.jpg', 'Sink detail, before and after cleaning'),
-                              ('img/lexonia-pro-clean-janitorial-caddy-supplies.jpg', 'Janitorial caddy stocked with cleaning supplies'),
                               ('img/lexonia-pro-clean-cleaning-cart-and-vacuum.jpg', 'Cleaning cart with mop bucket and vacuum')]}
     POSTS = BLOG.build(out, here, dict(SITE=SITE, BIZ_ID=BIZ_ID, business_ld=business_ld, page_hero=page_hero, cta_band=cta_band,
                                        render_page=render_page, root_links=root_links))
@@ -712,6 +708,7 @@ extra = '''
 .gallery figure{margin:0;background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);text-align:left}
 .gallery img{width:100%;height:auto;display:block}
 .gallery.three img{aspect-ratio:3/4;object-fit:cover;object-position:center 55%}
+@media (min-width:681px){.gallery.three.g2{grid-template-columns:repeat(2,1fr);max-width:720px;margin-left:auto;margin-right:auto}}   /* equipment gallery: two photos (owner Nov 2 2026) */
 .gallery-sub{margin-top:48px;font-size:1.15rem}
 .gallery figcaption{padding:12px 16px;font-size:.88rem;color:var(--muted)}
 .incl{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px;text-align:left}
