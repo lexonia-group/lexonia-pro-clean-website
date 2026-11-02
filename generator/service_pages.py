@@ -58,7 +58,7 @@ def build(c):
     def pricing(note):
         return ('<section id="price">\n  <div class="container center">\n    <span class="kicker">Pricing</span>\n    <h2 class="section-title">What It Costs</h2>\n'
                 '    <div class="sp-price reveal"><p class="sp-from"><strong>From $%d</strong> per visit for 1,000 to 2,000 sq ft, weekly, plus tax</p>\n'
-                '      <p>%s</p>\n      <p><a href="services.html#pricing">See the full price card by size of space</a></p></div>\n  </div>\n</section>\n\n' % (P, note))
+                '      <p>%s</p>\n      <p><a href="services.html#pricing">See the full price table by size of space</a></p></div>\n  </div>\n</section>\n\n' % (P, note))
 
     def how():
         return ('<section class="industries" id="how">\n  <div class="container center">\n    <span class="kicker">How It Starts</span>\n'
@@ -100,8 +100,8 @@ def build(c):
                        ['Restrooms', 'Break room / kitchenette', 'Offices and workspaces', 'Common areas', 'High-touch points, disinfected'], supply_note)
             + pricing('Interior windows can be added to a visit: %s, before sales tax.' % win_text)
             + how() + where + _faq(f) + _related('office-cleaning.html') + c['cta_band']() + '</main>\n')
-    pages['office-cleaning.html'] = dict(title='Office Cleaning in Eden Prairie & Twin Cities | Lexonia', path='office-cleaning.html', active='services.html',
-        desc='Office cleaning in Eden Prairie and the Twin Cities, evenings and nights on a written checklist. From $%d per visit. Free walkthrough, exact price in 24 hours.' % P,
+    pages['office-cleaning.html'] = dict(title='Office Cleaning Eden Prairie, Edina & Minnetonka | From $%d' % P, path='office-cleaning.html', active='services.html',
+        desc='$%d per visit for 1,000–2,000 sq ft, weekly, plus tax. Evening cleaning across the southwest metro: Hopkins, Bloomington, Chanhassen, St. Louis Park.' % P,
         body=body, ld_extra=service_ld('Office cleaning', 'Recurring office cleaning on a written checklist, evenings and nights: restrooms, break rooms, workspaces, common areas and high-touch points.', f, 'office-cleaning.html'))
 
     # ---- retail stores and boutiques
@@ -121,8 +121,8 @@ def build(c):
                        ['Small retail stores', 'Restrooms'], supply_note)
             + pricing('Daily cleaning, or a store over 10,000 sq ft, is a flat monthly contract quoted after the free walkthrough.')
             + how() + where + _faq(f) + _related('retail-cleaning.html') + c['cta_band']() + '</main>\n')
-    pages['retail-cleaning.html'] = dict(title='Retail Store & Boutique Cleaning | Eden Prairie & Twin Cities', path='retail-cleaning.html', active='services.html',
-        desc='Cleaning for small retail stores and boutiques in Eden Prairie and the Twin Cities, after you close. From $%d per visit. Free walkthrough first.' % P,
+    pages['retail-cleaning.html'] = dict(title='Retail Store Cleaning Edina, Eden Prairie, Minnetonka | $%d+' % P, path='retail-cleaning.html', active='services.html',
+        desc='$%d per visit for 1,000–2,000 sq ft, weekly, plus tax. Small stores and boutiques across the southwest metro, cleaned after you close.' % P,
         body=body, ld_extra=service_ld('Retail store and boutique cleaning', 'Recurring cleaning for small retail stores and boutiques after closing: sales floor, front counter, fitting rooms, mirrors, restrooms and back rooms.', f, 'retail-cleaning.html'))
 
     # ---- multi-story buildings

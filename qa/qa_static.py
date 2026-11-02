@@ -9,8 +9,15 @@ SITE='https://lexoniaproclean.com/'
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'generator'))
 from profiles import LINKED as _PROFILE_URLS
 ALLOWED_EXT=tuple(_PROFILE_URLS)+('https://unsplash.com/',)
-# Prices the owner made public as text (Oct 17 2026): from $155 per visit; interior windows $40 / $70 / $110. Any other dollar amount is flagged.
+# Prices the owner made public as text (Oct 17 2026): from $155 per visit; interior windows $40 / $70 / $110; and (Nov 2 2026) the full
+# size price table, read from the built prices.json so it cannot drift from PRICE_ROWS. Any other dollar amount is flagged.
 ALLOWED_PRICES={'$155','$40','$70','$110'}
+try:
+    import json as _j
+    _pj=_j.load(open(os.path.join(D,'prices.json'),encoding='utf-8'))
+    ALLOWED_PRICES|={'$%d'%v for v in _pj['weekly']+_pj['every_other_week']}
+except Exception as _e:
+    print('WARNING: prices.json not read:',_e)
 UTILITY=('404.html','thanks.html','unavailable.html','google49b64558210859aa.html')   # utility files: not-found, form thanks, region block page, Search Console verification file
 def as_file(path):
     return path+'index.html' if path.endswith('/') or path=='' else path

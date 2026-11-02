@@ -22,7 +22,7 @@ _sh.copytree(os.path.join(here, 'assets_src'), out, dirs_exist_ok=True)   # phot
 
 import json as _json
 SITE = 'https://lexoniaproclean.com/'
-BUILD_DATE = '2026-10-20'   # update when the content changes: used for sitemap lastmod and dateModified
+BUILD_DATE = '2026-11-02'   # update when the content changes: used for sitemap lastmod and dateModified
 CLARITY_ID = 'yybv330g41'   # Microsoft Clarity project (visitor analytics). The official snippet is written to the top of site.js (self-hosted, no inline script, CSP stays strict); its queue stub is required, the tag alone does not start
 LOGO = 'lexonia-pro-clean-commercial-cleaning-logo.png'
 LOGO_DARK = 'lexonia-pro-clean-commercial-cleaning-logo-dark.png'
@@ -202,11 +202,20 @@ PRICE_ROWS = [('1,000 – 2,000', 155, 163), ('2,000 – 3,000', 220, 231), ('3,
 WIN_ROWS = [('1–5 windows', 40), ('6–10 windows', 70), ('11–15 windows', 110)]
 PRICE_FROM, PRICE_TOP = PRICE_ROWS[0][1], PRICE_ROWS[-1][1]
 
-PRICE_IMG = PC.render(PRICE_ROWS, WIN_ROWS, os.path.join(out, 'img', 'pricing'), here)   # prices live only in these images, not in page text
+PRICE_IMG = PC.render(PRICE_ROWS, WIN_ROWS, os.path.join(out, 'img', 'pricing'), here)   # windows card image; the size price table is text (owner go Nov 2 2026)
 
 def _price_img(key, alt):
     src, w, h = PRICE_IMG[key]
     return '<img src="%s" width="%d" height="%d" alt="%s" loading="lazy" decoding="async" draggable="false">' % (src, w, h, alt)
+
+def price_table():
+    """The size price table as text (owner go Nov 2 2026: "go ahead" on publishing the 1,000-10,000 sq ft table as text, so search
+    engines and AI assistants can read and quote it). Built from PRICE_ROWS, the same list as prices.json and the instant quote email."""
+    rows = ''.join('<tr><th scope="row">%s&nbsp;sq&nbsp;ft</th><td>$%d</td><td>$%d</td></tr>' % (b.replace(' – ', '–'), w, e) for b, w, e in PRICE_ROWS)   # no wrap on phones
+    return ('<div class="ptable-wrap reveal" style="margin:0"><table class="ptable"><caption class="sr-only">Recurring cleaning price per visit by size of space, before sales tax</caption>'
+            '<thead><tr><th scope="col">Size of space</th><th scope="col">Weekly<small>per visit</small></th><th scope="col">Every other week<small>per visit</small></th></tr></thead>'
+            '<tbody>' + rows + '</tbody></table>'
+            '<p class="pnote">Before sales tax. Cleaning liquids and equipment included. Exact price in writing after a free walkthrough.</p></div>')
 
 def pricing_section():
     t_alt = ('Price card: recurring cleaning price per visit by size of space, weekly or every other week, for spaces from 1,000 to 10,000 square feet. '
@@ -215,7 +224,7 @@ def pricing_section():
     return ('<section id="pricing" class="pricing">\n  <div class="container center">\n    <span class="kicker">Pricing</span>\n    <h2 class="section-title">Pricing by Size of Space</h2>\n'
         '    <p class="section-lead" style="margin:0 auto">Recurring cleaning, weekly or every other week, for spaces up to 10,000 sq ft. Cleaning liquids and equipment are included. Your exact price is confirmed in writing after a free walkthrough.</p>\n'
         '    <div class="pshow">\n'
-        '      <figure class="pimg reveal">' + _price_img('by-size', t_alt) + '</figure>\n'
+        '      ' + price_table() + '\n'
         '      <div class="pside">\n'
         '        <figure class="pimg reveal">' + _price_img('windows', w_alt) + '</figure>\n'
         '        <div class="pcard reveal"><h3>Daily cleaning, or over 10,000 sq ft</h3><p>A flat monthly contract, quoted after the free walkthrough, so you know your exact cost before we start.</p></div>\n'
@@ -622,7 +631,7 @@ if not PREVIEW:
         '- Cleaning hours: ' + HOURS_TEXT + '.\n'
         '- What we do: recurring commercial cleaning on a written checklist, with a completed copy left on site after every visit. Restrooms, break rooms, workspaces, common areas, conference rooms, sales floors, mirrors and fitting rooms.\n'
         '- When: evenings and nights, when the business is closed.\n'
-        '- Pricing: a free walkthrough, then a written scope and an exact price within 24 hours. No surprise fees and no travel charges. Recurring cleaning up to 10,000 sq ft is priced per visit by size of space, weekly or every other week, before sales tax: from $' + str(PRICE_FROM) + ' per visit for 1,000 to 2,000 sq ft, weekly; the full price card is on the Services page. Interior windows are an add-on, priced by the number of windows: ' + ', '.join('$%d for %s' % (p, n.replace('–', ' to ')) for n, p in WIN_ROWS) + ', before sales tax. Daily cleaning, or a space over 10,000 sq ft: a flat monthly contract quoted after the walkthrough. Multi-story buildings: custom pricing, at greater discounts. For an exact price, request a free quote.\n'
+        '- Pricing: a free walkthrough, then a written scope and an exact price within 24 hours. No surprise fees and no travel charges. Recurring cleaning up to 10,000 sq ft is priced per visit by size of space, weekly or every other week, before sales tax: from $' + str(PRICE_FROM) + ' per visit for 1,000 to 2,000 sq ft, weekly. Full table, per visit (weekly / every other week): ' + '; '.join('%s sq ft $%d / $%d' % (b.replace(' – ', ' to '), w, e) for b, w, e in PRICE_ROWS) + '. Interior windows are an add-on, priced by the number of windows: ' + ', '.join('$%d for %s' % (p, n.replace('–', ' to ')) for n, p in WIN_ROWS) + ', before sales tax. Daily cleaning, or a space over 10,000 sq ft: a flat monthly contract quoted after the walkthrough. Multi-story buildings: custom pricing, at greater discounts. For an exact price, request a free quote.\n'
         '- Process: a free walkthrough of about 45 to 60 minutes, a written scope and exact price within 24 hours, then recurring cleaning. The first visit is a reset clean, recurring visits maintain it, and we check in after two weeks and adjust the scope until it fits.\n'
         '- Supplies: we bring the cleaning liquids and our own equipment, all included in the price.\n'
         '- Consumables: the client\'s company or building management supplies trash bags, soap, paper towels, tissue and restroom disposal bags. We do not supply or buy them. We restock them from the client\'s supply and say when something is running low.\n'

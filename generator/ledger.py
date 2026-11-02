@@ -3,15 +3,16 @@
 Why: to judge whether a change helped search results, each page changes at most once every 28 days, and every change is
 written down. seo/changes.csv holds one row per change: date, page, type, fingerprint, reason. The build calls check() and
 FAILS when a page's title, description or main text differs from its last row, or when an engine/owner change comes less than
-28 days after the page's previous change. Exempt from the 28-day spacing: baseline, new page, factual correction.
+28 days after the page's previous change. Exempt from the 28-day spacing: baseline, new page, factual correction, and
+'owner waiver' (only when the owner explicitly waived the wait in chat; the reason names the date - added Nov 2 2026).
 
 After an intended edit: build, then  python3 generator/ledger.py record site "<type>" "<reason>"  adds the rows, then build again.
 Blog articles are not tracked here (one a week by their own rule); the blog index changes with them.
 """
 import csv, datetime, hashlib, os, re, sys
 
-TYPES = ('baseline', 'new page', 'factual correction', 'engine change', 'owner request')
-EXEMPT = ('baseline', 'new page', 'factual correction')
+TYPES = ('baseline', 'new page', 'factual correction', 'engine change', 'owner request', 'owner waiver')
+EXEMPT = ('baseline', 'new page', 'factual correction', 'owner waiver')   # owner waiver: the owner explicitly waived the 28 days for this change; the reason says when
 SPACING_DAYS = 28
 FIELDS = ['date', 'page', 'type', 'fingerprint', 'reason']
 
