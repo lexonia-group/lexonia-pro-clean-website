@@ -27,6 +27,13 @@ C. Which janitorial companies clean small retail stores after hours in Minneapol
 D. How much does weekly office cleaning cost in Minnetonka MN for about 1,500 square feet?
 E. Commercial cleaning company for a multi-story office building in Bloomington MN?
 
+## 2026-11-02 (owner change between weekly runs)
+
+- Changed (owner waived the 28-day wait in chat, ledger type "owner waiver"): office page title "Office Cleaning Eden Prairie, Edina & Minnetonka | From $155"; retail page title "Retail Store Cleaning Edina, Eden Prairie, Minnetonka | $155+"; both descriptions give $155 per visit for 1,000–2,000 sq ft, weekly, and name southwest-metro towns; Services shows the full price table by size of space as text (was an image); llms.txt carries the same table. Commit 9dc44f5; IndexNow pinged for the three pages.
+- Why: owner wants the pages to target all southwest-metro cities, not only Eden Prairie, and the starting price tied to a size of space.
+- What it should move: yardstick 1, 4, 5 and 8 and prompt D. The ledger blocks the next change to these three pages until Nov 30.
+- Not a site effect: the owner is stopping Yelp ads (Nov 2), so the Yelp "sponsored" list mentions seen in the Edina and Bloomington town checks will drop out.
+
 ## 2026-10-29 (weekly run; gate closed until Nov 19)
 
 - Heartbeat: run 2026-10-29 06:28 CT, engine data 2026-10-26 (baseline + update).
