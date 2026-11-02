@@ -4,8 +4,10 @@ slug: what-does-office-cleaning-include
 date: 2026-10-29
 description: A room-by-room look at what a recurring office cleaning visit covers, what it does not, and who supplies what.
 category: Office cleaning know-how
-photo: img/lexonia-pro-clean-janitorial-caddy-supplies.jpg
-photo_alt: Janitorial caddy stocked with cleaning supplies, Lexonia Pro Clean
+photo: https://images.unsplash.com/photo-1637665691265-3d653ffd7c77?w=1600&q=80&fm=jpg
+photo_alt: Office kitchenette with dark cabinets beside a carpeted hallway, no people
+photo_credit: Craig Lovelidge
+photo_credit_url: https://unsplash.com/@craigology
 service: services.html
 service_label: The full checklist on our Services page
 ---
