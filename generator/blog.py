@@ -221,6 +221,11 @@ def build(out, here, ctx):
     upto = today_central()
     posts = load(content_dir, upto)
     imgs = {p['slug']: photo(p, out, here) for p in posts}
+    # Towns we serve, under every article (owner Nov 3 2026: no page per town - "optimize SEO to address it" on the pages we have).
+    # Taken from the site's one city list (areaServed in the business data, built from CITIES), so it cannot drift from the listing.
+    towns = [a['name'] for a in ctx['business_ld'](True)['areaServed'] if a.get('@type') == 'City']
+    where_line = ('      <p class="related">Where we work: offices and small retail stores in %s and %s.</p>\n'
+                  % (', '.join(towns[:-1]), towns[-1])) if towns else ''
     os.makedirs(os.path.join(out, 'blog'), exist_ok=True)
 
     # ---- index
@@ -267,6 +272,7 @@ def build(out, here, ctx):
                + '      <div class="short-answer"><strong class="sa-label">Short answer</strong><p>%s</p></div>\n' % _inline(answer)
                + md_to_html(rest) + '\n'
                + '      <p class="related">Related: <a href="%s">%s</a> · <a href="contact.html">Book a free walkthrough</a></p>\n' % (p['service'], html.escape(p['service_label']))
+               + where_line
                + '    </article>\n  </div>\n</section>\n' + more + ctx['cta_band']() + '</main>\n')
         url = SITE + 'blog/%s/' % p['slug']
         posting = {'@type': 'BlogPosting', '@id': url + '#article', 'headline': p['title'], 'description': p['description'],
