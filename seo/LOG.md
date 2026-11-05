@@ -27,6 +27,17 @@ C. Which janitorial companies clean small retail stores after hours in Minneapol
 D. How much does weekly office cleaning cost in Minnetonka MN for about 1,500 square feet?
 E. Commercial cleaning company for a multi-story office building in Bloomington MN?
 
+## 2026-11-05 (weekly run + monthly report; gate closed until Nov 19)
+
+- Heartbeat: run 2026-11-05 06:30 CT, engine data 2026-11-02 (Monday doc) plus the Wed Nov 4 town checks.
+- Runs moved (owner, Nov 4): the separate scheduled tasks are switched off; this weekly run and a Monday run (billing check + town checks) now fire in the owner's Pro Clean chat and report there. Wednesday town checks dropped.
+- Yardstick: 1-3 Eden Prairie: not in top 20, not in map pack (town check Oct 26). 4 Minnetonka: not in top 20 (Oct 26). 5 Edina: not in top 10, not in map pack (Nov 2). 6 commercial cleaning Minneapolis, 7 janitorial services Twin Cities, 8 retail store cleaning Minneapolis: not in results (approx., web search). 9 multi-story building cleaning: 22 impressions, 0 clicks (Search Console, Oct 19-31). 10 Lexonia Pro Clean: organic #1 (Google, Nov 2).
+- Site, Oct 19-31: 5 clicks, 90 impressions, average position 22.7; 13 pages indexed. Google listing: 27 views, 1 website click. Bing: 0 impressions, 0 Copilot citations.
+- Towns measured since Oct 26 (11 of 19): Eden Prairie, Minnetonka, Chanhassen, Hopkins (office search only), Edina, Bloomington, Chaska, St. Louis Park, Richfield, Wayzata, Excelsior. Map pack 0, organic top 10 0, AI Overview names us 0. The Yelp list mentions seen on Nov 2 (Edina, Bloomington) came from the paid Yelp slot; that ad ended Nov 3.
+- AI prompts naming us: 0 of 5 (Claude web search). Answers draw on franchise city pages (Anago, JAN-PRO, BookCleanGo, Executive Clean, Coverall), Thumbtack and BBB lists.
+- Leads (Oct 29 - Nov 5): website 0 real (1 internal test); outreach 1 reply (Hoyt: no common areas at Cedar Plaza or Hampshire Technology Center, each tenant hires its own cleaner); Transwestern blocked our sending address (do not contact).
+- Changed: this week's article "How Is Office Cleaning Priced?" goes live. Since the last entry: every blog article ends with the 19 service towns (Nov 3, commit 571c5a0). No page text changes: the gate opens Nov 19; office, retail and Services are locked until Nov 30; the home page title names towns on Nov 17.
+
 ## 2026-11-02 (owner change between weekly runs)
 
 - Changed (owner waived the 28-day wait in chat, ledger type "owner waiver"): office page title "Office Cleaning Eden Prairie, Edina & Minnetonka | From $155"; retail page title "Retail Store Cleaning Edina, Eden Prairie, Minnetonka | $155+"; both descriptions give $155 per visit for 1,000–2,000 sq ft, weekly, and name southwest-metro towns; Services shows the full price table by size of space as text (was an image); llms.txt carries the same table. Commit 9dc44f5; IndexNow pinged for the three pages.
