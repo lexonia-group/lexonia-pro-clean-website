@@ -27,6 +27,15 @@ C. Which janitorial companies clean small retail stores after hours in Minneapol
 D. How much does weekly office cleaning cost in Minnetonka MN for about 1,500 square feet?
 E. Commercial cleaning company for a multi-story office building in Bloomington MN?
 
+## 2026-11-12 (weekly run; gate closed until Nov 19)
+
+- Heartbeat: run 2026-11-12 06:40 CT, engine data 2026-11-02 (stale: the Mon Nov 9 run could not read Search Console, the listing, Bing or town checks because the owner's computer was not linked; doc "Engine data 2026-11-09" records "not measured").
+- Yardstick: not re-measured this week; last values stand as in the Nov 5 entry (1-8 not in top 20 / not in results; 9 multi-story building cleaning 22 impressions, 0 clicks; 10 Lexonia Pro Clean organic #1). No new town checks (11 of 19 cities measured so far).
+- AI prompts naming us: 0 of 5 (Claude web search). Answers draw on Anago and JAN-PRO city pages, BookCleanGo city pages, Executive Clean, Coverall, EMD Cleaning, Thumbtack and BBB lists. New this week: a small local competitor site (cocllc.netlify.app) shows up for prompts B, D and E with a pricing FAQ and a Bloomington office-cleaning page.
+- Leads (Nov 5 - Nov 12): website 0 (the quote-form scenario had no runs since Nov 4). Outreach replies not counted this week: the Gmail connector was signed in to a different Google account, so the business inbox could not be read.
+- Social: Tue Nov 10 customer job photo post (restroom vanity) published on Facebook and Google; daily publisher ran every day checked.
+- Changed: this week's article "How After-Hours Office Cleaning Works" goes live. No page text changes: the gate opens Nov 19; office, retail and Services are locked until Nov 30; the home page title names towns on Nov 17.
+
 ## 2026-11-05 (weekly run + monthly report; gate closed until Nov 19)
 
 - Heartbeat: run 2026-11-05 06:30 CT, engine data 2026-11-02 (Monday doc) plus the Wed Nov 4 town checks.
