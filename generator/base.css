@@ -153,6 +153,7 @@ form.quote-form{background:#fff;border-radius:20px;padding:38px;box-shadow:var(-
 .field textarea{resize:vertical;min-height:110px}
 form .btn{width:100%;justify-content:center;margin-top:6px}
 .form-note{font-size:.82rem;color:var(--muted);text-align:center;margin-top:14px}
+.form-error{font-size:.92rem;font-weight:600;color:#b00020;text-align:center;margin-top:14px}
 .hidden{display:none}
 
 /* Footer */

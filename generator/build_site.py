@@ -943,7 +943,37 @@ clarity_js = ('' if PREVIEW else
     "t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})"
     "(window, document, \"clarity\", \"script\", \"%s\");})();\n" % (_json.dumps(OWNER_CLARITY_IDS), CLARITY_ID))
 if not PREVIEW: js = js.replace("new Audio('audio/summerhill.mp3')", "new Audio('/audio/summerhill.mp3')")   # blog pages sit below the root
-open(os.path.join(out, 'site.js'), 'w', encoding='utf-8').write(clarity_js + js)
+
+# Quote form (owner Nov 15 2026): the form is sent in the background and only then the thank-you page opens as a plain page,
+# so refreshing, reopening or leaving that page open can never send the request again (a plain form post was re-sent twice on
+# Nov 15 when a thank-you tab was reloaded). The button is locked while sending (no double clicks). If sending fails, the visitor
+# sees a message with the phone number instead of a false thank-you. Without JavaScript the form still posts the old way.
+FORM_JS = """
+// Quote form: send in the background, then open the thank-you page (a reload of it sends nothing)
+(function(){
+  if(window.LPC_PREVIEW||!window.fetch||!window.FormData||!window.URLSearchParams) return;
+  var f=document.querySelector('form.quote-form'); if(!f) return;
+  var btn=f.querySelector('button[type=submit]'), label=btn?btn.textContent:'', busy=false;
+  function unlock(){busy=false; if(btn){btn.disabled=false; btn.textContent=label;}}
+  window.addEventListener('pageshow',function(e){if(e.persisted) unlock();});
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(busy) return; busy=true;
+    if(btn){btn.disabled=true; btn.textContent='Sending…';}
+    var err=document.getElementById('formError'); if(err) err.hidden=true;
+    var done=f.getAttribute('action')||'/thanks.html';
+    fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(f)).toString()})
+      .then(function(r){if(!r.ok) throw new Error('status '+r.status); window.location.replace(done);})
+      .catch(function(){
+        unlock();
+        if(!err){err=document.createElement('p'); err.id='formError'; err.className='form-error'; err.setAttribute('role','alert'); f.appendChild(err);}
+        err.hidden=false;
+        err.textContent='Sorry, your request did not go through. Please try again, or call or text __PHONE__.';
+      });
+  });
+})();
+""".replace('__PHONE__', PHONE)
+open(os.path.join(out, 'site.js'), 'w', encoding='utf-8').write(clarity_js + js + FORM_JS)
 import re as _re_ph
 PHONE_LD = '+1-' + PHONE[1:4] + '-' + PHONE[6:]   # schema.org form of PHONE, e.g. +1-952-697-4226
 # Guard: Thumbtack appears ONLY as the footer Contact icon (owner decision, Oct 14 2026); nowhere else
