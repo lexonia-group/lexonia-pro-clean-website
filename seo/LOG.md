@@ -27,6 +27,12 @@ C. Which janitorial companies clean small retail stores after hours in Minneapol
 D. How much does weekly office cleaning cost in Minnetonka MN for about 1,500 square feet?
 E. Commercial cleaning company for a multi-story office building in Bloomington MN?
 
+## 2026-11-17 (owner change between weekly runs)
+
+- Changed (ledger type "owner request", 28 days after the Oct 20 baseline): home page title "Commercial Cleaning & Janitorial | Eden Prairie, Edina MN" (was "Commercial Cleaning & Janitorial Services | Twin Cities MN"); description names Eden Prairie, Edina, Minnetonka, Bloomington and the Twin Cities, ends "Free walkthrough". Same text in og/twitter tags and the page schema. No page text, price or town-page change; IndexNow pinged for the home page.
+- Why: owner Nov 3 2026, "no you don't build page per town ... you have to optimize SEO to address it". The office and retail pages already name Eden Prairie, Edina and Minnetonka (Nov 2); the home page now carries the town names with the head terms commercial cleaning and janitorial.
+- What it should move: yardstick 2 and 3 (commercial cleaning / janitorial services Eden Prairie), 5 (Edina) and prompt E (Bloomington). Judge from Nov 26 at the earliest; the home page is locked until Dec 15. Office, retail and Services stay locked until Nov 30.
+
 ## 2026-11-12 (weekly run; gate closed until Nov 19)
 
 - Heartbeat: run 2026-11-12 06:40 CT, engine data 2026-11-02 (stale: the Mon Nov 9 run could not read Search Console, the listing, Bing or town checks because the owner's computer was not linked; doc "Engine data 2026-11-09" records "not measured").

@@ -22,7 +22,7 @@ _sh.copytree(os.path.join(here, 'assets_src'), out, dirs_exist_ok=True)   # phot
 
 import json as _json
 SITE = 'https://lexoniaproclean.com/'
-BUILD_DATE = '2026-11-02'   # update when the content changes: used for sitemap lastmod and dateModified
+BUILD_DATE = '2026-11-17'   # update when the content changes: used for sitemap lastmod and dateModified
 CLARITY_ID = 'yybv330g41'   # Microsoft Clarity project (visitor analytics). The official snippet is written to the top of site.js (self-hosted, no inline script, CSP stays strict); its queue stub is required, the tag alone does not start
 LOGO = 'lexonia-pro-clean-commercial-cleaning-logo.png'
 LOGO_DARK = 'lexonia-pro-clean-commercial-cleaning-logo-dark.png'
@@ -438,8 +438,8 @@ FONTS = ('<link rel="preload" href="fonts/sora-latin-wght-normal.woff2" as="font
          '<link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>\n')
 # ------------------------------------------------------------------ SEO / GEO
 META = {
-    'index.html': dict(title='Commercial Cleaning & Janitorial Services | Twin Cities MN', path='',
-        desc='Commercial cleaning and janitorial services for offices and small retail stores in Minneapolis, St. Paul and the suburbs. Insured crews. Free walkthrough.'),
+    'index.html': dict(title='Commercial Cleaning & Janitorial | Eden Prairie, Edina MN', path='',   # owner request Nov 3 2026: name the core southwest-metro towns, no town pages
+        desc='Commercial cleaning and janitorial services for offices and small retail in Eden Prairie, Edina, Minnetonka, Bloomington and the Twin Cities. Free walkthrough.'),
     'services.html': dict(title='Commercial Cleaning Services | Eden Prairie & Twin Cities MN', path='services.html',
         desc='Recurring office and small retail cleaning in the Twin Cities, priced per visit by size of space, on a written checklist. Liquids and equipment included.'),
     'why-us.html': dict(title='Why Choose Lexonia Pro Clean | Commercial Cleaning MN', path='why-us.html',
