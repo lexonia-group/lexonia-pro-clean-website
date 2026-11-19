@@ -27,6 +27,18 @@ C. Which janitorial companies clean small retail stores after hours in Minneapol
 D. How much does weekly office cleaning cost in Minnetonka MN for about 1,500 square feet?
 E. Commercial cleaning company for a multi-story office building in Bloomington MN?
 
+## 2026-11-19 (weekly run; gate open from today)
+
+- Heartbeat: run 2026-11-19 06:22 CT, engine data 2026-11-16 (Monday run on the owner's computer).
+- Yardstick: 1-3 Eden Prairie: not in top 20, not in map pack (town check Oct 26). 4 Minnetonka: not in top 20 (Oct 26). 5 Edina: not in top 10, not in map pack (Nov 2). 6 commercial cleaning Minneapolis, 7 janitorial services Twin Cities, 8 retail store cleaning Minneapolis: not in results (approx., web search). 9 multi-story building cleaning: 22 impressions, 0 clicks (Search Console Oct 19 - Nov 14, unchanged since Oct 31; position not recorded in the engine data). 10 Lexonia Pro Clean: organic #1 (Nov 2).
+- Site, Oct 19 - Nov 14: 5 clicks, 139 impressions (was 90), average position 24.4 (was 22.7); 14 pages indexed (was 13). Rising query: "how often should an office be cleaned" 10 impressions (was 2), the Oct 18 guide. Google listing: 55 profile views (was 27), 0 calls, 1 website click to date. Bing not read (signed out).
+- Town checks Nov 16 (Plymouth, Golden Valley, Burnsville): map pack 0 of 8, organic top 10 0 of 8, AI Overview shown 2 and names us 0. A Yelp "top 10 office cleaning Golden Valley" list names Lexonia Pro Clean 2nd. 14 of 19 cities measured.
+- AI prompts naming us: 0 of 5 (Claude web search). Answers draw on Anago, JAN-PRO, BookCleanGo, Executive Clean, Coverall, EMD Cleaning, Vanguard, Stratus, Thumbtack and BBB lists; the small local site cocllc.netlify.app again shows up for prompts B, D and E.
+- Leads (Nov 11 - Nov 19): website 0; Thumbtack 2 house-cleaning requests (residential, not pursued); outreach 2 replies, both declined.
+- Social: Tue Nov 17 article recap (pricing guide) published on Facebook and Google; the daily publisher ran every day Nov 12-18.
+- Decision (gate open): no page change this week. No yardstick search sits in positions 4-10 (Close); the only one with impressions (multi-story building cleaning) has no recorded position and is already the Dec 17 article topic. The Nov 17 home page change is judged from Nov 26; the engine data should carry each query's average position from Nov 23.
+- Changed: this week's article "How to Compare Office Cleaning Proposals" goes live.
+
 ## 2026-11-17 (owner change between weekly runs)
 
 - Changed (ledger type "owner request", 28 days after the Oct 20 baseline): home page title "Commercial Cleaning & Janitorial | Eden Prairie, Edina MN" (was "Commercial Cleaning & Janitorial Services | Twin Cities MN"); description names Eden Prairie, Edina, Minnetonka, Bloomington and the Twin Cities, ends "Free walkthrough". Same text in og/twitter tags and the page schema. No page text, price or town-page change; IndexNow pinged for the home page.
