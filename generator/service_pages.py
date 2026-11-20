@@ -12,6 +12,23 @@ TABS = [('services.html', 'All services'), ('office-cleaning.html', 'Office'), (
         ('multi-story-building-cleaning.html', 'Multi-story buildings'), ('interior-window-cleaning.html', 'Interior windows')]
 
 
+# Owner's own job photos on the service pages (owner Nov 19 2026: "add some of the newer pics"; social-safe crops only: no
+# customer name, sign, street or address). Images only, no captions, so the page text (change-ledger fingerprint) stays the same.
+import os as _os
+from PIL import Image as _Img
+_IMGDIR = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), 'assets_src', 'img')
+def _photos(items):
+    out = '<section class="photo-strip" aria-label="Photos from our work">\n  <div class="container">\n    <div class="gallery two">\n'
+    for name, alt in items:
+        w, h = _Img.open(_os.path.join(_IMGDIR, name)).size
+        out += ('      <figure class="reveal"><img src="img/%s" alt="%s" width="%d" height="%d" loading="lazy" decoding="async"></figure>\n'
+                % (name, alt, w, h))
+    return out + '    </div>\n  </div>\n</section>\n\n'
+OFFICE_PHOTOS = [('lexonia-pro-clean-office-hallway-cleaning.jpg', 'Office hallway carpet after an evening cleaning visit by Lexonia Pro Clean'),
+                 ('lexonia-pro-clean-conference-room-cleaning.jpg', 'Conference room table and chairs after an office cleaning visit by Lexonia Pro Clean')]
+RETAIL_PHOTOS = [('lexonia-pro-clean-boutique-seating-area-cleaning.jpg', 'Boutique seating area after an evening cleaning visit by Lexonia Pro Clean'),
+                 ('lexonia-pro-clean-boutique-sales-floor-cleaning.jpg', 'Boutique sales floor with clothing racks after an evening cleaning visit by Lexonia Pro Clean')]
+
 def subtabs(active):
     """Tabs inside the Services tab: shown under the heading on the Services page and on each service page."""
     items = ''.join('<li><a href="%s"%s>%s</a></li>' % (h, ' class="on" aria-current="page"' if h == active else '', _h.escape(t)) for h, t in TABS)
@@ -98,6 +115,7 @@ def build(c):
                       ('Every visit', 'a completed checklist left on site', '#included', 'What we clean')])
             + included('What We Clean in Your Office, Every Visit', 'A completed copy of the checklist is left on site, so you can see exactly what was done.',
                        ['Restrooms', 'Break room / kitchenette', 'Offices and workspaces', 'Common areas', 'High-touch points, disinfected'], supply_note)
+            + _photos(OFFICE_PHOTOS)
             + pricing('Interior windows can be added to a visit: %s, before sales tax.' % win_text)
             + how() + where + _faq(f) + _related('office-cleaning.html') + c['cta_band']() + '</main>\n')
     pages['office-cleaning.html'] = dict(title='Office Cleaning Eden Prairie, Edina & Minnetonka | From $%d' % P, path='office-cleaning.html', active='services.html',
@@ -119,6 +137,7 @@ def build(c):
                       ('Your store', 'a checklist built around your store', '#included', 'What we clean')])
             + included('What We Clean in Your Store', 'Retail checklists are built around your store. A completed copy is left on site after every visit.',
                        ['Small retail stores', 'Restrooms'], supply_note)
+            + _photos(RETAIL_PHOTOS)
             + pricing('Daily cleaning, or a store over 10,000 sq ft, is a flat monthly contract quoted after the free walkthrough.')
             + how() + where + _faq(f) + _related('retail-cleaning.html') + c['cta_band']() + '</main>\n')
     pages['retail-cleaning.html'] = dict(title='Retail Store Cleaning Edina, Eden Prairie, Minnetonka | $%d+' % P, path='retail-cleaning.html', active='services.html',
